@@ -1,5 +1,5 @@
-import { Manager } from "./scene/Manager"
-import { LoaderScene } from "./scene/LoaderScene"
+import { Manager } from "./screens/Manager"
+import { LoaderScene } from "./screens/LoaderScreen"
 import { BG_COLOR } from "../assets/assets"
 
 Manager.initialize(BG_COLOR)

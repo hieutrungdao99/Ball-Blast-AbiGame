@@ -8,13 +8,13 @@ export class GameScene extends Container {
     this.createClampy();
   }
 
-  createClampy(){
+  createClampy() {
     this.Clamp = new Game();
     this.addChild(this.Clamp);
   }
 
   update(framesPassed) {
-    this.Clamp.update(framesPassed)
+
   }
-  resize() {}
+  resize() { }
 }

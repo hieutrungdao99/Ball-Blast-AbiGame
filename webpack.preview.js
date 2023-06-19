@@ -6,15 +6,15 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const path = require("path");
 
 module.exports = {
-  entry: "./src/game.js",
+  entry: "./src/main.js",
   module: {
     rules: [
       {
-        test    : /\.m?js$/,
-        exclude : /(node_modules)/,
-        use     : {
-          loader  : "esbuild-loader",
-          options : {
+        test: /\.m?js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: "esbuild-loader",
+          options: {
             target: "es6",
           },
         },
@@ -26,22 +26,22 @@ module.exports = {
   },
   mode: "development",
   devtool: false,
-  output  : {
-    filename : "game.bundle.js",
+  output: {
+    filename: "game.bundle.js",
     path: path.resolve(__dirname, "dist"),
   },
   plugins: [
     new CleanWebpackPlugin({
-      protectWebpackAssets         : false,
-      cleanAfterEveryBuildPatterns : ["*.LICENSE.txt"],
+      protectWebpackAssets: false,
+      cleanAfterEveryBuildPatterns: ["*.LICENSE.txt"],
     }),
     new webpack.ProvidePlugin({
-      PIXI : "pixi.js",
+      PIXI: "pixi.js",
     }),
     new HtmlWebpackPlugin({
-      filename           : `index.html`,
-      template           : "./src/index.html",
-      minify             : true,
+      filename: `index.html`,
+      template: "./src/index.html",
+      minify: true,
       inlineSource: ".(js|css)$",
     }),
     new HtmlInlineScriptPlugin(),
@@ -51,5 +51,5 @@ module.exports = {
       ],
     }),
   ],
-  
+
 };
