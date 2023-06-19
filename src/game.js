@@ -1,17 +1,9 @@
-import { Application } from "pixi.js";
-export class Game {
+import { Manager } from "./scene/Manager"
+import { LoaderScene } from "./scene/LoaderScene"
+import { BG_COLOR } from "../assets/assets"
 
-    static init() {
+Manager.initialize(BG_COLOR)
 
-        this.app = new Application({
-            width: window.innerWidth,
-            height: window.innerHeight,
-            backgroundColor: 0x1099bb,
-
-        });
-        document.body.appendChild(this.app.view);
-    }
-}
-window.onload = function () {
-    Game.init();
-}
+// We no longer need to tell the scene the size because we can ask Manager!
+const loady = new LoaderScene()
+Manager.changeScene(loady)
