@@ -1,8 +1,8 @@
 import { Container, Assets } from "pixi.js"
-import { manifest } from "../../assets/assets"
+import { manifest } from "../utils/assets"
 import { Manager } from "./Manager"
-import { GameScene } from "./GameScreen"
-import { LoadingBarContainer } from "../game/LoadingBar"
+import { GameScene } from "./GameScene"
+import { LoadingBarContainer } from "../script/screen/LoadingBar"
 
 export class LoaderScene extends Container {
   constructor() {
@@ -35,6 +35,6 @@ export class LoaderScene extends Container {
     // Change scene to the game scene!
     Manager.changeScene(new GameScene())
   }
-  update() { }
-  resize() { }
+  update() {}
+  resize() {}
 }

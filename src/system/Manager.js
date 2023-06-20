@@ -4,31 +4,25 @@ export class Manager {
   constructor() {
     /*this class is purely static. No constructor to see here*/
   }
-
   // We no longer need to store width and height since now it is literally the size of the screen.
   // We just modify our getters
   static get width() {
-    return Math.max(
-      document.documentElement.clientWidth,
-      window.innerWidth || 0
-    )
+    return Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
   }
   static get height() {
-    return Math.max(
-      document.documentElement.clientHeight,
-      window.innerHeight || 0
-    )
+    return Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
   }
 
   // Use this function ONCE to start the entire machinery
   static initialize(background) {
+
     // Create our pixi app
     Manager.app = new Application({
       view: document.getElementById("pixi-canvas"),
       resolution: window.devicePixelRatio || 1,
       resizeTo: window,
       autoDensity: true,
-      backgroundColor: background
+      backgroundColor: background,
     })
 
     // Add the ticker
@@ -64,6 +58,5 @@ export class Manager {
     if (Manager.currentScene) {
       Manager.currentScene.update(framesPassed)
     }
-    // as I said before, I HATE the "frame passed" approach. I would rather use `Manager.app.ticker.deltaMS`
   }
 }

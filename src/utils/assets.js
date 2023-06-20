@@ -4,7 +4,8 @@ export const manifest = {
             name : "images",
             assets:
             {
-                "Clampy" : "./clampy.png",
+                "Clampy" : "images/clampy.png",
+                "Bg" : "images/background.png"
             }
         },
         {
@@ -16,5 +17,3 @@ export const manifest = {
         },
     ]
 }
-
-export const BG_COLOR = 0x1099bb;

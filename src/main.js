@@ -1,8 +1,7 @@
-import { Manager } from "./screens/Manager"
-import { LoaderScene } from "./screens/LoaderScreen"
-import { BG_COLOR } from "../assets/assets"
+import { Manager } from "./system/Manager"
+import { LoaderScene } from "./system/LoaderScene"
 
-Manager.initialize(BG_COLOR)
+Manager.initialize(0x1099bb)
 
 // We no longer need to tell the scene the size because we can ask Manager!
 const loady = new LoaderScene()
