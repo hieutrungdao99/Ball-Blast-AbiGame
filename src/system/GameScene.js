@@ -5,17 +5,23 @@ import { Canon } from '../script/game/Canon';
 export class GameScene extends Container {
     constructor() {
         super();
-
+        this.createBackground();
+        this.createCannon();
+    }
+    createBackground() {
         // Create Background
         const background = new GameScreen();
         this.bg = background.backgroundSprite;
         this.bg2 = background.backgroundSprite2;
         this.addChild(this.bg);
         this.addChild(this.bg2);
+    }
+    createCannon() {
         // Create Canon
         const canon = new Canon();
         this._canon = canon.canonSprite;
         this.addChild(this._canon);
+        //Create TierCanon
         this.tireCanon = canon.tireCanonSprite;
         this.addChild(this.tireCanon);
         this.tireCanon2 = canon.tireCanonSprite2;

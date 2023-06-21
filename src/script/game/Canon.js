@@ -23,16 +23,9 @@ export class Canon {
         this.tireCanon.width = 50;
         this.tireCanon.height = 50;
         this.tireCanon.x = this._canon.x + 15;
-        this.tireCanon.y = this._canon.y + 15;
+        this.tireCanon.y = this._canon.y + 20;
 
         this.container.addChild(this.tireCanon);
-
-        this.tireCanon2 = Sprite.from('/assets/images/TireCanon.png');
-        this.tireCanon2.width = 50;
-        this.tireCanon2.height = 50;
-        this.tireCanon2.x = this._canon.x - 65;
-        this.tireCanon2.y = this._canon.y + 15;
-        this.container.addChild(this.tireCanon2);
     }
     getTireCanon2() {
         this.tireCanon2 = Sprite.from('/assets/images/TireCanon.png');
@@ -40,7 +33,7 @@ export class Canon {
         this.tireCanon2.height = 50;
         // this.tireCanon.anchor.set(0.5)
         this.tireCanon2.x = this._canon.x - 65;
-        this.tireCanon2.y = this._canon.y + 15;
+        this.tireCanon2.y = this._canon.y + 20;
 
         this.container.addChild(this.tireCanon2);
     }
