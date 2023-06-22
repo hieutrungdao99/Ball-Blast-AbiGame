@@ -1,50 +1,70 @@
-import { Container } from 'pixi.js';
+import { Container, Ticker } from 'pixi.js';
 import { GameScreen } from '../script/screen/GameScreen';
 import { Canon } from '../script/game/Canon';
 
 export class GameScene extends Container {
+    keys = {};
     constructor() {
         super();
         this.createBackground();
         this.createCannon();
+        this.sortChildren();
         this.space = 5;
-        // event keydown
-        this.onKeyDown = this.onKeyDown.bind(this);
-        window.addEventListener('keydown', this.onKeyDown);
+        // //Event
+        document.addEventListener('keydown', (e) => {
+            this.keys[e.key] = true;
+            console.log(e.key);
+        });
+        document.addEventListener('keyup', (e) => {
+            this.keys[e.key] = false;
+            console.log(e.key);
+        });
+
+        Ticker.shared.add(this.update, this);
     }
     createBackground() {
         // Create Background
         const background = new GameScreen();
+        this.backgroundContainer = new Container();
+
         this.bg = background.backgroundSprite;
+        this.bg.zIndex = 1;
         this.bg2 = background.backgroundSprite2;
-        this.addChild(this.bg);
-        this.addChild(this.bg2);
+        this.bg2.zIndex = 2;
+        this.backgroundContainer.addChild(this.bg);
+        this.backgroundContainer.addChild(this.bg2);
+
+        this.backgroundContainer.zIndex = 0;
+        this.backgroundContainer.sortChildren();
+        this.addChild(this.backgroundContainer);
     }
     createCannon() {
         // Create Canon
         const canon = new Canon();
-        this._canon = canon.canonSprite;
-        this.addChild(this._canon);
+        this.canonContainer = new Container();
+        this._canonSprite = canon.canonSprite;
+        this.canonContainer.addChild(this._canonSprite);
+        this._canonSprite.zIndex = 0;
         //Create TierCanon
         this.tireCanon = canon.tireCanonSprite;
-        this.addChild(this.tireCanon);
+        this.canonContainer.addChild(this.tireCanon);
+        this.tireCanon.zIndex = 1;
         this.tireCanon2 = canon.tireCanonSprite2;
-        this.addChild(this.tireCanon2);
-    }
-    static onKeyDown(event) {
-        const keyCode = event.keyCode;
-        // di chuyen theo phim mui ten
-        if (keyCode === 37) {
-            this._canon.moveLeft(this.space);
-        } else if (keyCode === 38) {
-            this._canon.moveUp(this.space);
-        }
+        this.tireCanon2.zIndex = 1;
+        this.canonContainer.addChild(this.tireCanon2);
+        this.canonContainer.sortChildren();
+
+        this.canonContainer.zIndex = 100;
+        this.addChild(this.canonContainer);
     }
     update(framesPassed) {
+        if (this.keys['ArrowLeft'] || this.keys['a']) {
+            this.canonContainer.x -= 5;
+        }
+        if (this.keys['ArrowRight'] || this.keys['d']) {
+            this.canonContainer.x += 5;
+        }
         this.bg.tilePosition.x -= 2 * framesPassed;
-    }
-    update2(deltaTime) {
-        this._canon.update2(deltaTime);
     }
     resize() {}
 }

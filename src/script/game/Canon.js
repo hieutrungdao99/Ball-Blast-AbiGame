@@ -47,18 +47,11 @@ export class Canon {
     get tireCanonSprite2() {
         return this.tireCanon2;
     }
-    moveLeft(space) {
-        this.moveX = -space;
-    }
-    moveRight(space) {
-        this.moveX = space;
-    }
-    update(deltaTime) {
-        const _canonWidth = this._canon.width;
-        // const x = this.animatedClampy.x + this.moveX;
-        this._canon.x = this._canon.x + 2 * deltaTime;
-        if (this._canon.x > innerWidth) {
-            this._canon.x = 0;
-        }
-    }
+    // moveLeft(space) {
+    //     this.moveX = -space;
+    // }
+    // moveRight(space) {
+    //     this.moveX = space;
+    // }
+    
 }
