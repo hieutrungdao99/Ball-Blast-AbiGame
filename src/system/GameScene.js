@@ -60,9 +60,14 @@ export class GameScene extends Container {
     update(framesPassed) {
         if (this.keys['ArrowLeft'] || this.keys['a']) {
             this.canonContainer.x -= 5;
+            this.tireCanon.rotation +=1;
+            this.tireCanon2.rotation +=1;
         }
         if (this.keys['ArrowRight'] || this.keys['d']) {
             this.canonContainer.x += 5;
+            this.tireCanon.rotation +=1;
+            this.tireCanon2.rotation +=1;
+
         }
         this.bg.tilePosition.x -= 2 * framesPassed;
     }
