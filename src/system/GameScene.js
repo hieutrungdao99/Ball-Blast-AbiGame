@@ -15,7 +15,7 @@ export class GameScene extends Container {
         this.sortChildren();
         this.space = 5;
         this.lastShootTime = 0;
-        this.shootInterval = 100;
+        this.shootInterval = 150; //khoang cach dan
         // //Event
         document.addEventListener('keydown', (e) => {
             this.keys[e.key] = true;
@@ -96,7 +96,8 @@ export class GameScene extends Container {
                     texture,
                     this._canonSprite.x + this.canonContainer.x,
                     this._canonSprite.y - 40,
-                    10,
+                    10, //speed
+                    0.7, //scale
                 );
                 this.bulletsContainer.addChild(bullet);
                 this.lastShootTime = currentTime;
