@@ -87,7 +87,7 @@ export class GameScene extends Container {
             const texture = Texture.from('/assets/images/missile.png');
             const bullet = new Bullet(
                 texture,
-                this._canonSprite.x,
+                this._canonSprite.x + this.canonContainer.x,
                 this._canonSprite.y - 20,
                 10,
             );
