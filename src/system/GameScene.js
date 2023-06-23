@@ -5,18 +5,17 @@ import { Bullet } from '../script/game/Bullet';
 import { Manager } from './Manager';
 
 export class GameScene extends Container {
+    keys = {};
+    minX;
+    maxX;
     constructor() {
         super();
-        this.space = 5;
-        this.lastShootTime = 0;
-        this.shootInterval = 100;
-        keys = {};
-        minX;
-        maxX;
         this.createBackground();
         this.createCannon();
         this.sortChildren();
-
+        this.space = 5;
+        this.lastShootTime = 0;
+        this.shootInterval = 100;
         // //Event
         document.addEventListener('keydown', (e) => {
             this.keys[e.key] = true;
