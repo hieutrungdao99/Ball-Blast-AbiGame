@@ -3,7 +3,7 @@ import { GameScreen } from '../script/screen/GameScreen';
 import { Canon } from '../script/game/Canon';
 import { Bullet } from '../script/game/Bullet';
 import { Manager } from './Manager';
-
+import { Meteor } from '../script/game/Meteor';
 export class GameScene extends Container {
     keys = {};
     minX;
@@ -13,6 +13,7 @@ export class GameScene extends Container {
         this.createBackground();
         this.createCannon();
         this.sortChildren();
+        this.createMeteor();
         this.space = 5;
         this.lastShootTime = 0;
         this.shootInterval = 150; //khoang cach dan
@@ -62,6 +63,14 @@ export class GameScene extends Container {
         this.addChild(this.bulletsContainer);
         this.canonContainer.zIndex = 100;
         this.addChild(this.canonContainer);
+    }
+    createMeteor() {
+        const meteor = new Meteor()
+        this.meteorContainer = new Container();
+        this.meteor = meteor.meteorSprite;
+        this.meteorContainer.addChild(this.meteor);
+        this.addChild(this.meteorContainer)
+        this.meteorContainer.zIndex = 100;
     }
     update(framesPassed) {
         if (this.keys['ArrowLeft'] || this.keys['a']) {
