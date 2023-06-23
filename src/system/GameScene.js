@@ -1,9 +1,13 @@
-import { Container, Ticker } from 'pixi.js';
+import { Container, Ticker, Texture } from 'pixi.js';
 import { GameScreen } from '../script/screen/GameScreen';
 import { Canon } from '../script/game/Canon';
+import { Bullet } from '../script/game/Bullet';
+import { Manager } from './Manager';
 
 export class GameScene extends Container {
     keys = {};
+    minX;
+    maxX;
     constructor() {
         super();
         this.createBackground();
@@ -13,11 +17,9 @@ export class GameScene extends Container {
         // //Event
         document.addEventListener('keydown', (e) => {
             this.keys[e.key] = true;
-            console.log(e.key);
         });
         document.addEventListener('keyup', (e) => {
             this.keys[e.key] = false;
-            console.log(e.key);
         });
 
         Ticker.shared.add(this.update, this);
@@ -45,7 +47,7 @@ export class GameScene extends Container {
         this._canonSprite = canon.canonSprite;
         this.canonContainer.addChild(this._canonSprite);
         this._canonSprite.zIndex = 0;
-        //Create TierCanon
+        //Create TireCanon
         this.tireCanon = canon.tireCanonSprite;
         this.canonContainer.addChild(this.tireCanon);
         this.tireCanon.zIndex = 1;
@@ -54,22 +56,52 @@ export class GameScene extends Container {
         this.canonContainer.addChild(this.tireCanon2);
         this.canonContainer.sortChildren();
 
+        this.bulletsContainer = new Container();
+        this.addChild(this.bulletsContainer);
         this.canonContainer.zIndex = 100;
         this.addChild(this.canonContainer);
     }
     update(framesPassed) {
         if (this.keys['ArrowLeft'] || this.keys['a']) {
             this.canonContainer.x -= 5;
-            this.tireCanon.rotation +=1;
-            this.tireCanon2.rotation +=1;
+            this.tireCanon.rotation += 1;
+            this.tireCanon2.rotation += 1;
         }
         if (this.keys['ArrowRight'] || this.keys['d']) {
             this.canonContainer.x += 5;
-            this.tireCanon.rotation +=1;
-            this.tireCanon2.rotation +=1;
-
+            this.tireCanon.rotation += 1;
+            this.tireCanon2.rotation += 1;
         }
+
         this.bg.tilePosition.x -= 2 * framesPassed;
+        this.minX = -Manager.width / 2 + this.tireCanon.width;
+        this.maxX = Manager.width / 2 - this.tireCanon.width; // Use GameScreen.screenWidth
+
+        if (this.canonContainer.x < this.minX) {
+            this.canonContainer.x = this.minX;
+            console.log(this.canonContainer.x);
+        } else if (this.canonContainer.x > this.maxX) {
+            this.canonContainer.x = this.maxX;
+        }
+        if (this.keys['a'] || this.keys['d']) {
+            const texture = Texture.from('/assets/images/missile.png');
+            const bullet = new Bullet(
+                texture,
+                this._canonSprite.x,
+                this._canonSprite.y - 20,
+                10,
+            );
+            this.bulletsContainer.addChild(bullet);
+        }
+
+        for (let i = 0; i < this.bulletsContainer.children.length; i++) {
+            const bullet = this.bulletsContainer.children[i];
+            bullet.update(framesPassed);
+            if (bullet.y < -bullet.height) {
+                this.bulletsContainer.removeChild(bullet);
+            }
+        }
     }
+
     resize() {}
 }
