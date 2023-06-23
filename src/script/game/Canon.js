@@ -17,8 +17,7 @@ export class Canon {
         this._canon.anchor.set(0.5);
         this._canon.x = Manager.width / 2;
         this._canon.y = Manager.height - 100;
-        console.log(this._canon.height);
-        console.log(this._canon.width);
+    
 
         this.container.addChild(this._canon);
     }

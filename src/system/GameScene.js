@@ -65,10 +65,20 @@ export class GameScene extends Container {
         this.addChild(this.canonContainer);
     }
     createMeteor() {
-        const meteor = new Meteor()
         this.meteorContainer = new Container();
-        this.meteor = meteor.meteorSprite;
-        this.meteorContainer.addChild(this.meteor);
+        const meteorMin = new Meteor()
+        this.meteorMin = meteorMin.meteorSpriteMin;
+        this.meteorContainer.addChild(this.meteorMin);
+
+        const meteorNormal = new Meteor()
+        this.meteorNormal = meteorNormal.meteorSpriteNormal;
+        this.meteorContainer.addChild(this.meteorNormal);
+
+        const meteorMax = new Meteor()
+        this.meteorMax = meteorMax.meteorSpriteMax;
+        this.meteorContainer.addChild(this.meteorMax);
+      
+        
         this.addChild(this.meteorContainer)
         this.meteorContainer.zIndex = 100;
     }
