@@ -5,15 +5,18 @@ import { Bullet } from '../script/game/Bullet';
 import { Manager } from './Manager';
 
 export class GameScene extends Container {
-    keys = {};
-    minX;
-    maxX;
     constructor() {
         super();
+        this.space = 5;
+        this.lastShootTime = 0;
+        this.shootInterval = 100;
+        keys = {};
+        minX;
+        maxX;
         this.createBackground();
         this.createCannon();
         this.sortChildren();
-        this.space = 5;
+
         // //Event
         document.addEventListener('keydown', (e) => {
             this.keys[e.key] = true;
@@ -75,7 +78,7 @@ export class GameScene extends Container {
 
         this.bg.tilePosition.x -= 2 * framesPassed;
         this.minX = -Manager.width / 2 + this.tireCanon.width;
-        this.maxX = Manager.width / 2 - this.tireCanon.width; // Use GameScreen.screenWidth
+        this.maxX = Manager.width / 2 - this.tireCanon.width;
 
         if (this.canonContainer.x < this.minX) {
             this.canonContainer.x = this.minX;
@@ -83,17 +86,24 @@ export class GameScene extends Container {
         } else if (this.canonContainer.x > this.maxX) {
             this.canonContainer.x = this.maxX;
         }
+        const currentTime = Date.now();
         if (this.keys['a'] || this.keys['d']) {
-            const texture = Texture.from('/assets/images/missile.png');
-            const bullet = new Bullet(
-                texture,
-                this._canonSprite.x + this.canonContainer.x,
-                this._canonSprite.y - 20,
-                10,
-            );
-            this.bulletsContainer.addChild(bullet);
+            // Tính toán khoảng cách giữa thời điểm bắn đạn cuối cùng và thời điểm hiện tại
+            const timeSinceLastShoot = currentTime - this.lastShootTime;
+            if (timeSinceLastShoot >= this.shootInterval) {
+                // Bắn đạn
+                const texture = Texture.from('/assets/images/missile.png');
+                const bullet = new Bullet(
+                    texture,
+                    this._canonSprite.x + this.canonContainer.x,
+                    this._canonSprite.y - 40,
+                    10,
+                );
+                this.bulletsContainer.addChild(bullet);
+                this.lastShootTime = currentTime;
+            }
         }
-
+        //xóa đạn khi vượt khỏi khung hình
         for (let i = 0; i < this.bulletsContainer.children.length; i++) {
             const bullet = this.bulletsContainer.children[i];
             bullet.update(framesPassed);
