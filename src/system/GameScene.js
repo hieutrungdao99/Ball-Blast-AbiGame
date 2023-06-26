@@ -162,12 +162,11 @@ export class GameScene extends Container {
                 for (let j = 0; j < this.meteorContainer.children.length; j++) {
                     const meteor = this.meteorContainer.children[j];
                     if (this.hitTestRectangle(bullet, meteor)) {
-                        //xử lí tăng point
-                        this.collisionCount++;
-                        this.bitmapText.collisionCount++;
+                        // Tăng giá trị collisionCount lên số lần va chạm đã xảy ra
+                        this.collisionCount += 1;
+                        this.bitmapText.collisionCount = this.collisionCount;
                         this.bitmapText.text = 'Point: ' + this.collisionCount;
-                        // Xóa đạn và sao băng
-
+                        // Kiểm tra nếu đã va chạm 5 lần thì mới xóa đạn và sao băng
                         this.bulletsContainer.removeChild(bullet);
                         this.meteorContainer.removeChild(meteor);
                     }
