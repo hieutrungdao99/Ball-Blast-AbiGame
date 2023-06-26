@@ -4,6 +4,7 @@ import { Canon } from '../script/game/Canon';
 import { Bullet } from '../script/game/Bullet';
 import { Manager } from './Manager';
 import { Meteor } from '../script/game/Meteor';
+import { PointText } from '../script/game/BitmapText';
 export class GameScene extends Container {
     keys = {};
     minX;
@@ -14,6 +15,8 @@ export class GameScene extends Container {
         this.createCannon();
         this.sortChildren();
         this.createMeteor();
+        this.createPoint();
+        this.collisionCount = 0;
         this.space = 5;
         this.lastShootTime = 0;
         this.shootInterval = 150; //khoang cach dan
@@ -66,23 +69,40 @@ export class GameScene extends Container {
     }
     createMeteor() {
         this.meteorContainer = new Container();
-        const meteorMin = new Meteor()
+        const meteorMin = new Meteor();
         this.meteorMin = meteorMin.meteorSpriteMin;
         this.meteorContainer.addChild(this.meteorMin);
 
-        const meteorNormal = new Meteor()
+        const meteorNormal = new Meteor();
         this.meteorNormal = meteorNormal.meteorSpriteNormal;
         this.meteorContainer.addChild(this.meteorNormal);
 
-        const meteorMax = new Meteor()
+        const meteorMax = new Meteor();
         this.meteorMax = meteorMax.meteorSpriteMax;
         this.meteorContainer.addChild(this.meteorMax);
-      
-        
-        this.addChild(this.meteorContainer)
+
+        this.addChild(this.meteorContainer);
         this.meteorContainer.zIndex = 100;
     }
+    createPoint() {
+        this.bitmapTextContainer = new Container();
+        const pointText = new PointText();
+        this.bitmapText = pointText.BitmapTextSprite;
+        this.bitmapTextContainer.addChild(this.bitmapText);
+        this.addChild(this.bitmapTextContainer);
+    }
+
     update(framesPassed) {
+        //xử lý di chuyển
+        this.handleMove();
+        //xử lý khung hình
+        this.handleFrame(framesPassed);
+        //xử lý bắn
+        this.handleShoot(framesPassed);
+        //xử lý va chạm
+        this.handleColide(framesPassed);
+    }
+    handleMove() {
         if (this.keys['ArrowLeft'] || this.keys['a']) {
             this.canonContainer.x -= 5;
             this.tireCanon.rotation += 1;
@@ -93,17 +113,8 @@ export class GameScene extends Container {
             this.tireCanon.rotation += 1;
             this.tireCanon2.rotation += 1;
         }
-
-        this.bg.tilePosition.x -= 2 * framesPassed;
-        this.minX = -Manager.width / 2 + this.tireCanon.width;
-        this.maxX = Manager.width / 2 - this.tireCanon.width;
-
-        if (this.canonContainer.x < this.minX) {
-            this.canonContainer.x = this.minX;
-            console.log(this.canonContainer.x);
-        } else if (this.canonContainer.x > this.maxX) {
-            this.canonContainer.x = this.maxX;
-        }
+    }
+    handleShoot(framesPassed) {
         const currentTime = Date.now();
         if (this.keys['a'] || this.keys['d']) {
             // Tính toán khoảng cách giữa thời điểm bắn đạn cuối cùng và thời điểm hiện tại
@@ -131,6 +142,44 @@ export class GameScene extends Container {
             }
         }
     }
+    handleFrame(framesPassed) {
+        if (this.canonContainer.x < this.minX) {
+            this.canonContainer.x = this.minX;
+        } else if (this.canonContainer.x > this.maxX) {
+            this.canonContainer.x = this.maxX;
+        }
+        this.bg.tilePosition.x -= 2 * framesPassed;
+        this.minX = -Manager.width / 2 + this.tireCanon.width;
+        this.maxX = Manager.width / 2 - this.tireCanon.width;
+    }
+    handleColide(framesPassed) {
+        for (let i = 0; i < this.bulletsContainer.children.length; i++) {
+            const bullet = this.bulletsContainer.children[i];
+            bullet.update(framesPassed);
+            if (bullet.y < -bullet.height) {
+                this.bulletsContainer.removeChild(bullet);
+            } else {
+                for (let j = 0; j < this.meteorContainer.children.length; j++) {
+                    const meteor = this.meteorContainer.children[j];
+                    if (this.hitTestRectangle(bullet, meteor)) {
+                        //xử lí tăng point
+                        this.collisionCount++;
+                        this.bitmapText.collisionCount++;
+                        this.bitmapText.text = 'Point: ' + this.collisionCount;
+                        // Xóa đạn và sao băng
 
+                        this.bulletsContainer.removeChild(bullet);
+                        this.meteorContainer.removeChild(meteor);
+                    }
+                }
+            }
+        }
+    }
+
+    hitTestRectangle(r1, r2) {
+        // Kiểm tra va chạm giữa hai hình chữ nhật
+        const hit = r1.getBounds().intersects(r2.getBounds());
+        return hit;
+    }
     resize() {}
 }
