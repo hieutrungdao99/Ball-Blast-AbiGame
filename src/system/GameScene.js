@@ -155,7 +155,6 @@ export class GameScene extends Container {
     handleCollide(framesPassed) {
         for (let i = 0; i < this.bulletsContainer.children.length; i++) {
             const bullet = this.bulletsContainer.children[i];
-            const canon = this.canonContainer.children[i];
             if (bullet) {
                 bullet.update(framesPassed);
                 if (bullet.y < -bullet.height) {
@@ -199,11 +198,10 @@ export class GameScene extends Container {
         //xu li va cham canon voi phao dai
         for (let i = 0; i < this.canonContainer.children.length; i++) {
             const canon = this.canonContainer.children[i];
-
             for (let j = 0; j < this.meteorContainer.children.length; j++) {
                 const meteor = this.meteorContainer.children[j];
-                const _canon = canon.getBounds();
-                const _meteor = meteor.getBounds();
+                var _canon = canon.getBounds();
+                var _meteor = meteor.getBounds();
 
                 if (meteor) {
                     if (
@@ -226,8 +224,7 @@ export class GameScene extends Container {
         }
     }
     hitTestRectangle(x1, y1, w1, h1, x2, y2, w2, h2) {
-        const hit = x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;
-        return hit;
+        return x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;
     }
     resize() {}
 }
