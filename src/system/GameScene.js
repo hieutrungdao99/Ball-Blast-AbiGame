@@ -100,7 +100,7 @@ export class GameScene extends Container {
         //xử lý bắn
         this.handleShoot(framesPassed);
         //xử lý va chạm
-        this.handleColide(framesPassed);
+        this.handleCollide(framesPassed);
     }
     handleMove() {
         if (this.keys['ArrowLeft'] || this.keys['a']) {
@@ -152,32 +152,81 @@ export class GameScene extends Container {
         this.minX = -Manager.width / 2 + this.tireCanon.width;
         this.maxX = Manager.width / 2 - this.tireCanon.width;
     }
-    handleColide(framesPassed) {
+    handleCollide(framesPassed) {
         for (let i = 0; i < this.bulletsContainer.children.length; i++) {
             const bullet = this.bulletsContainer.children[i];
-            bullet.update(framesPassed);
-            if (bullet.y < -bullet.height) {
-                this.bulletsContainer.removeChild(bullet);
-            } else {
-                for (let j = 0; j < this.meteorContainer.children.length; j++) {
-                    const meteor = this.meteorContainer.children[j];
-                    if (this.hitTestRectangle(bullet, meteor)) {
-                        // Tăng giá trị collisionCount lên số lần va chạm đã xảy ra
-                        this.collisionCount += 1;
-                        this.bitmapText.collisionCount = this.collisionCount;
-                        this.bitmapText.text = 'Point: ' + this.collisionCount;
-                        // Kiểm tra nếu đã va chạm 5 lần thì mới xóa đạn và sao băng
-                        this.bulletsContainer.removeChild(bullet);
-                        this.meteorContainer.removeChild(meteor);
+            const canon = this.canonContainer.children[i];
+            if (bullet) {
+                bullet.update(framesPassed);
+                if (bullet.y < -bullet.height) {
+                    this.bulletsContainer.removeChild(bullet);
+                } else {
+                    for (
+                        let j = 0;
+                        j < this.meteorContainer.children.length;
+                        j++
+                    ) {
+                        const meteor = this.meteorContainer.children[j];
+                        const _bullet = bullet.getBounds();
+                        const _meteor = meteor.getBounds();
+                        if (meteor) {
+                            if (
+                                this.hitTestRectangle(
+                                    _bullet.x,
+                                    _bullet.y,
+                                    bullet.width,
+                                    bullet.height,
+                                    _meteor.x,
+                                    _meteor.y,
+                                    meteor.width,
+                                    meteor.height,
+                                )
+                            ) {
+                                // Xử lý khi đạn va chạm với thiên thạch
+                                this.collisionCount += 1;
+                                this.bitmapText.collisionCount =
+                                    this.collisionCount;
+                                this.bitmapText.text =
+                                    'Point: ' + this.collisionCount;
+                                this.bulletsContainer.removeChild(bullet);
+                                this.meteorContainer.removeChild(meteor);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //xu li va cham canon voi phao dai
+        for (let i = 0; i < this.canonContainer.children.length; i++) {
+            const canon = this.canonContainer.children[i];
+
+            for (let j = 0; j < this.meteorContainer.children.length; j++) {
+                const meteor = this.meteorContainer.children[j];
+                const _canon = canon.getBounds();
+                const _meteor = meteor.getBounds();
+
+                if (meteor) {
+                    if (
+                        this.hitTestRectangle(
+                            _canon.x,
+                            _canon.y,
+                            canon.width,
+                            canon.height,
+                            _meteor.x,
+                            _meteor.y,
+                            meteor.width,
+                            meteor.height,
+                        )
+                    ) {
+                        // Xử lý khi đạn va chạm với thiên thạch
+                        Ticker.shared.stop();
                     }
                 }
             }
         }
     }
-
-    hitTestRectangle(r1, r2) {
-        // Kiểm tra va chạm giữa hai hình chữ nhật
-        const hit = r1.getBounds().intersects(r2.getBounds());
+    hitTestRectangle(x1, y1, w1, h1, x2, y2, w2, h2) {
+        const hit = x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;
         return hit;
     }
     resize() {}
