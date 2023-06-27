@@ -5,6 +5,7 @@ import { Bullet } from '../script/game/Bullet';
 import { Manager } from './Manager';
 import { Meteor } from '../script/game/Meteor';
 import { PointText } from '../script/game/BitmapText';
+import { ResultScene } from '../script/screen/ResultScene';
 export class GameScene extends Container {
     keys = {};
     minX;
@@ -20,6 +21,7 @@ export class GameScene extends Container {
         this.space = 5;
         this.lastShootTime = 0;
         this.shootInterval = 150; //khoang cach dan
+        this.resultDisplayed = false;
         // //Event
         document.addEventListener('keydown', (e) => {
             this.keys[e.key] = true;
@@ -196,28 +198,34 @@ export class GameScene extends Container {
             }
         }
         //xu li va cham canon voi phao dai
-        for (let i = 0; i < this.canonContainer.children.length; i++) {
-            const canon = this.canonContainer.children[i];
-            for (let j = 0; j < this.meteorContainer.children.length; j++) {
-                const meteor = this.meteorContainer.children[j];
-                var _canon = canon.getBounds();
-                var _meteor = meteor.getBounds();
+        if (!this.resultDisplayed) {
+            for (let i = 0; i < this.canonContainer.children.length; i++) {
+                const canon = this.canonContainer.children[i];
+                for (let j = 0; j < this.meteorContainer.children.length; j++) {
+                    const meteor = this.meteorContainer.children[j];
+                    var _canon = canon.getBounds();
+                    var _meteor = meteor.getBounds();
 
-                if (meteor) {
-                    if (
-                        this.hitTestRectangle(
-                            _canon.x,
-                            _canon.y,
-                            canon.width,
-                            canon.height,
-                            _meteor.x,
-                            _meteor.y,
-                            meteor.width,
-                            meteor.height,
-                        )
-                    ) {
-                        // Xử lý khi đạn va chạm với thiên thạch
-                        Ticker.shared.stop();
+                    if (meteor) {
+                        if (
+                            this.hitTestRectangle(
+                                _canon.x,
+                                _canon.y,
+                                canon.width,
+                                canon.height,
+                                _meteor.x,
+                                _meteor.y,
+                                meteor.width,
+                                meteor.height,
+                            )
+                        ) {
+                            Ticker.shared.stop();
+                            this.resultDisplayed = true;
+                            console.log('log');
+                            const resultScene = new ResultScene();
+                            const resultSprite = resultScene.ResultSprite;
+                            this.addChild(resultScene.container);
+                        }
                     }
                 }
             }
