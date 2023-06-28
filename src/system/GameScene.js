@@ -71,13 +71,25 @@ export class GameScene extends Container {
     }
     createMeteor() {
         this.meteorContainer = new Container();
-        const meteorMin = new Meteor();
-        this.meteorMin = meteorMin.meteorSpriteMin;
-        this.meteorContainer.addChild(this.meteorMin);
-
-        const meteorNormal = new Meteor();
-        this.meteorNormal = meteorNormal.meteorSpriteNormal;
-        this.meteorContainer.addChild(this.meteorNormal);
+        this.meteors=[];
+        this.setIntervalMeteorMin = setInterval(()=>{
+            const meteorMin = new Meteor();
+            this.meteorMin = meteorMin.meteorSpriteMin;
+            this.meteors.push(meteorMin);
+            this.meteorContainer.addChild(this.meteorMin);
+        },1000)
+        this.setIntervalMeteorNormal = setInterval(()=>{
+            const meteorNormal = new Meteor();
+            this.meteorNormal = meteorNormal.meteorSpriteNormal;
+            this.meteors.push(meteorNormal);
+            this.meteorContainer.addChild(this.meteorNormal);
+        },2000)
+        this.setIntervalMeteorMax = setInterval(()=>{
+            const meteorMax = new Meteor();
+            this.meteorMax = meteorMax.meteorSpriteMax;
+            this.meteors.push(meteorMax);
+            this.meteorContainer.addChild(this.meteorMax);
+        },3000)
 
         const meteorMax = new Meteor();
         this.meteorMax = meteorMax.meteorSpriteMax;
@@ -191,13 +203,22 @@ export class GameScene extends Container {
                                     'Point: ' + this.collisionCount;
                                 this.bulletsContainer.removeChild(bullet);
                                 this.meteorContainer.removeChild(meteor);
+                                // điều kiện thắng
+                                if(this.collisionCount >=10) { 
+                                    clearInterval(this.setIntervalMeteorMin)
+                                    clearInterval(this.setIntervalMeteorNormal)
+                                    clearInterval(this.setIntervalMeteorMax)
+                                    this.resultDisplayed = true;
+                                    const resultScene = new ResultScene();
+                                    const resultSprite = resultScene.ResultSprite;
+                                    this.addChild(resultScene.container);
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        //xu li va cham canon voi phao dai
         if (!this.resultDisplayed) {
             for (let i = 0; i < this.canonContainer.children.length; i++) {
                 const canon = this.canonContainer.children[i];
@@ -221,10 +242,13 @@ export class GameScene extends Container {
                         ) {
                             Ticker.shared.stop();
                             this.resultDisplayed = true;
-                            console.log('log');
                             const resultScene = new ResultScene();
                             const resultSprite = resultScene.ResultSprite;
                             this.addChild(resultScene.container);
+                            clearInterval(this.setIntervalMeteorMin)
+                            clearInterval(this.setIntervalMeteorNormal)
+                            clearInterval(this.setIntervalMeteorMax)
+
                         }
                     }
                 }

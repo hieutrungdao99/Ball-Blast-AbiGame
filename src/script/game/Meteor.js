@@ -30,7 +30,7 @@ export class Meteor extends Container {
     const meteorsMins = ["assets/images/meteorMin.png"];
     this.meteorMin = new AnimatedSprite(meteorsMins.map((frame) => Texture.from(frame)));
     this.container.addChild(this.meteorMin);
-    this.meteorMin.x = -this.meteorMin.width; 
+    this.meteorMin.x = 0; 
     this.meteorMin.y = Math.random() * (0); 
   }
 
@@ -38,7 +38,7 @@ export class Meteor extends Container {
     const meteorsNormals = ["assets/images/meteorNormal.png"];
     this.meteorNormal = new AnimatedSprite(meteorsNormals.map((frame) => Texture.from(frame)));
     this.container.addChild(this.meteorNormal);
-    this.meteorNormal.x = Manager.width - this.meteorNormal.width;
+    this.meteorNormal.x = 0;
     this.meteorNormal.y = Math.random() * (0 - this.meteorNormal.height); 
   }
 
@@ -47,7 +47,7 @@ export class Meteor extends Container {
     this.meteorMax = new AnimatedSprite(meteorsMaxs.map((frame) => Texture.from(frame)));
     // this.meteorMax.width = 250;
     this.container.addChild(this.meteorMax);
-    this.meteorMax.x = Manager.width - this.meteorMax.width;
+    this.meteorMax.x = Manager.width + this.meteorMax.width;
     this.meteorMax.y = Math.random() * (0 - this.meteorMax.height); 
   }
 
