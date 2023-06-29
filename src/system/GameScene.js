@@ -6,6 +6,7 @@ import { Manager } from './Manager';
 import { Meteor } from '../script/game/Meteor';
 import { PointText } from '../script/game/BitmapText';
 import { ResultScene } from '../script/screen/ResultScene';
+import { StarGame } from '../script/screen/StartGame';
 export class GameScene extends Container {
     keys = {};
     minX;
@@ -71,25 +72,25 @@ export class GameScene extends Container {
     }
     createMeteor() {
         this.meteorContainer = new Container();
-        this.meteors=[];
-        this.setIntervalMeteorMin = setInterval(()=>{
+        this.meteors = [];
+        this.setIntervalMeteorMin = setInterval(() => {
             const meteorMin = new Meteor();
             this.meteorMin = meteorMin.meteorSpriteMin;
             this.meteors.push(meteorMin);
             this.meteorContainer.addChild(this.meteorMin);
-        },1000)
-        this.setIntervalMeteorNormal = setInterval(()=>{
+        }, 1000);
+        this.setIntervalMeteorNormal = setInterval(() => {
             const meteorNormal = new Meteor();
             this.meteorNormal = meteorNormal.meteorSpriteNormal;
             this.meteors.push(meteorNormal);
             this.meteorContainer.addChild(this.meteorNormal);
-        },2000)
-        this.setIntervalMeteorMax = setInterval(()=>{
+        }, 2000);
+        this.setIntervalMeteorMax = setInterval(() => {
             const meteorMax = new Meteor();
             this.meteorMax = meteorMax.meteorSpriteMax;
             this.meteors.push(meteorMax);
             this.meteorContainer.addChild(this.meteorMax);
-        },3000)
+        }, 3000);
 
         const meteorMax = new Meteor();
         this.meteorMax = meteorMax.meteorSpriteMax;
@@ -116,6 +117,7 @@ export class GameScene extends Container {
         //xử lý va chạm
         this.handleCollide(framesPassed);
     }
+
     handleMove() {
         if (this.keys['ArrowLeft'] || this.keys['a']) {
             this.canonContainer.x -= 5;
@@ -166,7 +168,7 @@ export class GameScene extends Container {
         this.minX = -Manager.width / 2 + this.tireCanon.width;
         this.maxX = Manager.width / 2 - this.tireCanon.width;
     }
-    handleCollide(framesPassed) {
+    handleCollide(framesPassed, result) {
         for (let i = 0; i < this.bulletsContainer.children.length; i++) {
             const bullet = this.bulletsContainer.children[i];
             if (bullet) {
@@ -204,14 +206,26 @@ export class GameScene extends Container {
                                 this.bulletsContainer.removeChild(bullet);
                                 this.meteorContainer.removeChild(meteor);
                                 // điều kiện thắng
-                                if(this.collisionCount >=10) { 
-                                    clearInterval(this.setIntervalMeteorMin)
-                                    clearInterval(this.setIntervalMeteorNormal)
-                                    clearInterval(this.setIntervalMeteorMax)
+                                if (
+                                    this.collisionCount >= 20 &&
+                                    !this.resultDisplayed
+                                ) {
+                                    clearInterval(this.setIntervalMeteorMin);
+                                    clearInterval(this.setIntervalMeteorNormal);
+                                    clearInterval(this.setIntervalMeteorMax);
                                     this.resultDisplayed = true;
-                                    const resultScene = new ResultScene();
-                                    const resultSprite = resultScene.ResultSprite;
-                                    this.addChild(resultScene.container);
+                                    this.resultScene = new ResultScene(
+                                        'win',
+                                        result,
+                                    );
+                                    this.resultScene = new ResultScene(
+                                        true,
+                                        this.collisionCount,
+                                    );
+                                    this.resultScene.on('replay', () => {
+                                        this.startNewGame();
+                                    });
+                                    this.addChild(this.resultScene.container);
                                 }
                             }
                         }
@@ -242,18 +256,70 @@ export class GameScene extends Container {
                         ) {
                             Ticker.shared.stop();
                             this.resultDisplayed = true;
-                            const resultScene = new ResultScene();
-                            const resultSprite = resultScene.ResultSprite;
-                            this.addChild(resultScene.container);
-                            clearInterval(this.setIntervalMeteorMin)
-                            clearInterval(this.setIntervalMeteorNormal)
-                            clearInterval(this.setIntervalMeteorMax)
-
+                            this.resultScene = new ResultScene(
+                                result,
+                                this.collisionCount,
+                            );
+                            this.resultScene.on('replay', () => {
+                                this.startNewGame();
+                            });
+                            this.addChild(this.resultScene.container);
+                            clearInterval(this.setIntervalMeteorMin);
+                            clearInterval(this.setIntervalMeteorNormal);
+                            clearInterval(this.setIntervalMeteorMax);
                         }
                     }
                 }
             }
         }
+    }
+    startNewGame() {
+        //xóa thiên thạch cũ
+        this.meteorContainer.removeChildren();
+        this.meteors = [];
+
+        for (let i = 0; i < this.meteorContainer.children.length; i++) {
+            const meteor = this.meteorContainer.children[i];
+            this.meteorContainer.removeChild(meteor);
+        }
+        for (let i = 0; i < this.bulletsContainer.children.length; i++) {
+            const bullet = this.bulletsContainer.children[i];
+            this.bulletsContainer.removeChild(bullet);
+        }
+
+        // Reset các giá trị về mặc định
+        this.collisionCount = 0;
+        this.bitmapText.collisionCount = 0;
+        this.bitmapText.text = 'Point: 0';
+        this.resultDisplayed = false;
+
+        //tạo thiên thạch mới
+        this.setIntervalMeteorMin = setInterval(() => {
+            const meteorMin = new Meteor();
+            this.meteorMin = meteorMin.meteorSpriteMin;
+            this.meteors.push(meteorMin);
+            this.meteorContainer.addChild(this.meteorMin);
+        }, 1000);
+        this.setIntervalMeteorNormal = setInterval(() => {
+            const meteorNormal = new Meteor();
+            this.meteorNormal = meteorNormal.meteorSpriteNormal;
+            this.meteors.push(meteorNormal);
+            this.meteorContainer.addChild(this.meteorNormal);
+        }, 2000);
+        this.setIntervalMeteorMax = setInterval(() => {
+            const meteorMax = new Meteor();
+            this.meteorMax = meteorMax.meteorSpriteMax;
+            this.meteors.push(meteorMax);
+            this.meteorContainer.addChild(this.meteorMax);
+        }, 3000);
+        //xóa màn kết quả
+        if (this.resultScene) {
+            this.removeChild(this.resultScene.container);
+            this.resultScene = null;
+        }
+
+        // Khởi động lại trò chơi
+        Ticker.shared.start();
     }
     hitTestRectangle(x1, y1, w1, h1, x2, y2, w2, h2) {
         return x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;

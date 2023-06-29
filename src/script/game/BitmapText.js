@@ -14,12 +14,11 @@ export class PointText extends Container {
             fill: 'red',
         });
 
-        const bitmapText = new BitmapText('Point' + ':', {
+        const bitmapText = new BitmapText('Point ' + '0', {
             fontName: 'Desyrel',
             align: 'right',
         });
         this.bitmapText = bitmapText;
-        // this.bitmapText.collisionCount = this.collisionCount;
     }
 
     get BitmapTextSprite() {
