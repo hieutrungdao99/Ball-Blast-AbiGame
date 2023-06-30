@@ -1854,8 +1854,9 @@ const manifest = {
     {
       name: "images",
       assets: {
-        Bg: "assets/images/envirenement.png",
-        Cloud: "assets/images/cloud.jpg"
+        Clampy: "images/clampy.png",
+        Bg: "images/envirenement.png",
+        Cloud: "images/cloud.jpg"
       }
     },
     {
@@ -37777,11 +37778,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _system_LoaderScene__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./system/LoaderScene */ "./src/system/LoaderScene.js");
 
 
-window.load = () => {
-  _system_Manager__WEBPACK_IMPORTED_MODULE_0__.Manager.initialize(1087931);
-  const loady = new _system_LoaderScene__WEBPACK_IMPORTED_MODULE_1__.LoaderScene();
-  _system_Manager__WEBPACK_IMPORTED_MODULE_0__.Manager.changeScene(loady);
-};
+_system_Manager__WEBPACK_IMPORTED_MODULE_0__.Manager.initialize(1087931);
+const loady = new _system_LoaderScene__WEBPACK_IMPORTED_MODULE_1__.LoaderScene();
+_system_Manager__WEBPACK_IMPORTED_MODULE_0__.Manager.changeScene(loady);
 
 })();
 
