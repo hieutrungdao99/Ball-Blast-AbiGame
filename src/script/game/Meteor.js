@@ -1,4 +1,4 @@
-import { Container, Sprite, AnimatedSprite, Texture, Ticker } from "pixi.js";
+import { Container, Sprite, AnimatedSprite, Texture, Ticker,ColorMatrixFilter } from "pixi.js";
 import { Manager } from "../../system/Manager";
 
 export class Meteor extends Container {
@@ -30,25 +30,35 @@ export class Meteor extends Container {
     const meteorsMins = ["assets/images/meteorMin.png"];
     this.meteorMin = new AnimatedSprite(meteorsMins.map((frame) => Texture.from(frame)));
     this.container.addChild(this.meteorMin);
-    this.meteorMin.x = 0; 
-    this.meteorMin.y = Math.random() * (0); 
+    this.meteorMin.x = Math.random() < 0.5 ? 0 : Manager.width; 
+    this.meteorMin.y = Math.random() * (Manager.height/2 - this.meteorMin.height); 
+    // this.meteorMin.tint = 0xFF0000;
+    const tintFilterMin = new ColorMatrixFilter();
+    tintFilterMin.tint(0x00FF00);
+    this.meteorMin.filters = [tintFilterMin];
+    
   }
 
   createMeteorNormal() {
     const meteorsNormals = ["assets/images/meteorNormal.png"];
     this.meteorNormal = new AnimatedSprite(meteorsNormals.map((frame) => Texture.from(frame)));
     this.container.addChild(this.meteorNormal);
-    this.meteorNormal.x = 0;
-    this.meteorNormal.y = Math.random() * (0 - this.meteorNormal.height); 
+    this.meteorNormal.x = Math.random() < 0.5 ? 0 : Manager.width
+    this.meteorNormal.y = Math.random() * (Manager.height/2 - this.meteorNormal.height); 
+    // this.meteorMax.tint = 0x0000FF;
+    const tintFilterNormal = new ColorMatrixFilter();
+    tintFilterNormal.tint(0x0000FF);
+    this.meteorNormal.filters = [tintFilterNormal];
   }
-
   createMeteorMax() {
     const meteorsMaxs = ["assets/images/meteorMax.png"];
     this.meteorMax = new AnimatedSprite(meteorsMaxs.map((frame) => Texture.from(frame)));
-    // this.meteorMax.width = 250;
     this.container.addChild(this.meteorMax);
-    this.meteorMax.x = Manager.width + this.meteorMax.width;
-    this.meteorMax.y = Math.random() * (0 - this.meteorMax.height); 
+    this.meteorMax.x = Math.random() < 0.5 ? 0 : Manager.width;
+    this.meteorMax.y = Math.random() * (Manager.height/3 - this.meteorMax.height); 
+    const tintFilter = new ColorMatrixFilter();
+    tintFilter.tint(0xFF0000); 
+    this.meteorMax.filters = [tintFilter];
   }
 
   get meteorSpriteMin() {

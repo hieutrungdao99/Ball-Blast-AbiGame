@@ -89,24 +89,24 @@ export class GameScene extends Container {
     createMeteor() {
         this.meteorContainer = new Container();
         this.meteors = [];
-        this.setIntervalMeteorMin = setInterval(() => {
-            const meteorMin = new Meteor();
-            this.meteorMin = meteorMin.meteorSpriteMin;
-            this.meteors.push(meteorMin);
-            this.meteorContainer.addChild(this.meteorMin);
-        }, 1000);
-        this.setIntervalMeteorNormal = setInterval(() => {
-            const meteorNormal = new Meteor();
-            this.meteorNormal = meteorNormal.meteorSpriteNormal;
-            this.meteors.push(meteorNormal);
-            this.meteorContainer.addChild(this.meteorNormal);
-        }, 2000);
-        this.setIntervalMeteorMax = setInterval(() => {
-            const meteorMax = new Meteor();
-            this.meteorMax = meteorMax.meteorSpriteMax;
-            this.meteors.push(meteorMax);
-            this.meteorContainer.addChild(this.meteorMax);
-        }, 3000);
+        // // this.setIntervalMeteorMin = setInterval(() => {
+        // //     const meteorMin = new Meteor();
+        // //     this.meteorMin = meteorMin.meteorSpriteMin;
+        // //     this.meteors.push(meteorMin);
+        // //     this.meteorContainer.addChild(this.meteorMin);
+        // // }, 1000);
+        // // this.setIntervalMeteorNormal = setInterval(() => {
+        // //     const meteorNormal = new Meteor();
+        // //     this.meteorNormal = meteorNormal.meteorSpriteNormal;
+        // //     this.meteors.push(meteorNormal);
+        // //     this.meteorContainer.addChild(this.meteorNormal);
+        // // }, 2000);
+        // this.setIntervalMeteorMax = setInterval(() => {
+        //     const meteorMax = new Meteor();
+        //     this.meteorMax = meteorMax.meteorSpriteMax;
+        //     this.meteors.push(meteorMax);
+        //     this.meteorContainer.addChild(this.meteorMax);
+        // }, 4000);
 
         const meteorMax = new Meteor();
         this.meteorMax = meteorMax.meteorSpriteMax;
@@ -213,17 +213,23 @@ export class GameScene extends Container {
                                     meteor.height,
                                 )
                             ) {
+                                if (meteor === this.meteorMax) {
+                                    this.splitMeteor(meteor)                       
+                          }
+                          if (meteor === this.meteorNormal1) {
+                            this.splitMeteor2(meteor)                       
+                  }
                                 // Xử lý khi đạn va chạm với thiên thạch
                                 this.collisionCount += 1;
                                 this.bitmapText.collisionCount =
                                     this.collisionCount;
                                 this.bitmapText.text =
-                                    'Point: ' + this.collisionCount;
+                                    `Score: + (${this.collisionCount})`;
                                 this.bulletsContainer.removeChild(bullet);
                                 this.meteorContainer.removeChild(meteor);
                                 // điều kiện thắng
                                 if (
-                                    this.collisionCount >= 20 &&
+                                    this.collisionCount >= 50 &&
                                     !this.resultDisplayed
                                 ) {
                                     clearInterval(this.setIntervalMeteorMin);
@@ -306,10 +312,10 @@ export class GameScene extends Container {
         // Reset các giá trị về mặc định
         this.collisionCount = 0;
         this.bitmapText.collisionCount = 0;
-        this.bitmapText.text = 'Point: 0';
+        this.bitmapText.text = 'Score: 0';
         this.resultDisplayed = false;
 
-        // //tạo thiên thạch mới
+        //tạo thiên thạch mới
         this.setIntervalMeteorMin = setInterval(() => {
             const meteorMin = new Meteor();
             this.meteorMin = meteorMin.meteorSpriteMin;
@@ -327,7 +333,7 @@ export class GameScene extends Container {
             this.meteorMax = meteorMax.meteorSpriteMax;
             this.meteors.push(meteorMax);
             this.meteorContainer.addChild(this.meteorMax);
-        }, 3000);
+        }, 4000);
         //xóa màn kết quả
         if (this.resultScene) {
             this.removeChild(this.resultScene.container);
@@ -336,6 +342,35 @@ export class GameScene extends Container {
 
         // Khởi động lại trò chơi
         Ticker.shared.start();
+    }
+    splitMeteor(meteor){
+        const meteorNormal1 = new Meteor()
+        this.meteorNormal1 = meteorNormal1.meteorSpriteNormal;
+        meteorNormal1.position.x = meteor.position.x - meteor.width / 2;
+        meteorNormal1.position.y = meteor.position.y;
+         this.meteorContainer.addChild(this.meteorNormal1);
+        this.meteors.push(meteorNormal1);
+        const meteorNormal2 = new Meteor()
+        this.meteorNormal2 = meteorNormal2.meteorSpriteNormal;
+        meteorNormal2.position.x = meteor.position.x - meteor.width / 2;
+        meteorNormal2.position.y = meteor.position.y;
+         this.meteorContainer.addChild(this.meteorNormal2);
+        this.meteors.push(meteorNormal2);
+        
+    }
+    splitMeteor2(meteor){
+        const meteorMin1 = new Meteor()
+        this.meteorMin1 = meteorMin1.meteorSpriteMin;
+        meteorMin1.position.x = meteor.position.x - meteor.width / 2;
+        meteorMin1.position.y = meteor.position.y;
+         this.meteorContainer.addChild(this.meteorMin1);
+        this.meteors.push(meteorMin1);
+        const meteorMin2 = new Meteor()
+        this.meteorMin2 = meteorMin2.meteorSpriteMin;
+        meteorMin2.position.x = meteor.position.x - meteor.width / 2;
+        meteorMin2.position.y = meteor.position.y;
+         this.meteorContainer.addChild(this.meteorMin2);
+        this.meteors.push(meteorMin2);
     }
     hitTestRectangle(x1, y1, w1, h1, x2, y2, w2, h2) {
         return x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;

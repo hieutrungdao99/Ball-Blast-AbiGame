@@ -8,14 +8,14 @@ export class PointText extends Container {
     }
 
     createBitmapText() {
-        BitmapFont.from('Desyrel', {
+        BitmapFont.from('Roboto', {
             fontFamily: 'Arial',
             fontSize: 40,
             fill: 'red',
         });
 
-        const bitmapText = new BitmapText('Point ' + '0', {
-            fontName: 'Desyrel',
+        const bitmapText = new BitmapText(`Score:+ 0`, {
+            fontName: 'Roboto',
             align: 'right',
         });
         this.bitmapText = bitmapText;
