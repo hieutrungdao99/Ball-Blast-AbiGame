@@ -887,7 +887,7 @@ class Canon {
     this.getTireCanon2();
   }
   createCanon() {
-    this._canon = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite.from("/assets/images/Canon.png");
+    this._canon = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite.from("Canon");
     this._canon.width = 100;
     this._canon.height = 100;
     this._canon.anchor.set(0.5);
@@ -896,7 +896,7 @@ class Canon {
     this.container.addChild(this._canon);
   }
   getTireCanon() {
-    this.tireCanon = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite.from("/assets/images/TireCanon.png");
+    this.tireCanon = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite.from("TireCanon");
     this.tireCanon.width = 50;
     this.tireCanon.height = 50;
     this.tireCanon.x = this._canon.x + 35;
@@ -905,7 +905,7 @@ class Canon {
     this.container.addChild(this.tireCanon);
   }
   getTireCanon2() {
-    this.tireCanon2 = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite.from("/assets/images/TireCanon.png");
+    this.tireCanon2 = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite.from("TireCanon");
     this.tireCanon2.width = 50;
     this.tireCanon2.height = 50;
     this.tireCanon2.x = this._canon.x - 40;
@@ -971,7 +971,7 @@ class Meteor extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     pixi_js__WEBPACK_IMPORTED_MODULE_0__.Ticker.shared.add(this.update, this);
   }
   createMeteorMin() {
-    const meteorsMins = ["assets/images/meteorMin.png"];
+    const meteorsMins = ["MeteorMin"];
     this.meteorMin = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.AnimatedSprite(meteorsMins.map((frame) => pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from(frame)));
     this.container.addChild(this.meteorMin);
     this.meteorMin.x = Math.random() < 0.5 ? 0 : _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
@@ -981,7 +981,7 @@ class Meteor extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     this.meteorMin.filters = [tintFilterMin];
   }
   createMeteorNormal() {
-    const meteorsNormals = ["assets/images/meteorNormal.png"];
+    const meteorsNormals = ["MeteorNor"];
     this.meteorNormal = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.AnimatedSprite(meteorsNormals.map((frame) => pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from(frame)));
     this.container.addChild(this.meteorNormal);
     this.meteorNormal.x = Math.random() < 0.5 ? 0 : _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
@@ -991,7 +991,7 @@ class Meteor extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     this.meteorNormal.filters = [tintFilterNormal];
   }
   createMeteorMax() {
-    const meteorsMaxs = ["assets/images/meteorMax.png"];
+    const meteorsMaxs = ["MeteorMax"];
     this.meteorMax = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.AnimatedSprite(meteorsMaxs.map((frame) => pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from(frame)));
     this.container.addChild(this.meteorMax);
     this.meteorMax.x = Math.random() < 0.5 ? 0 : _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
@@ -1226,7 +1226,7 @@ class ResultScene extends events__WEBPACK_IMPORTED_MODULE_2__.EventEmitter {
     this.createResult(win, score, result);
   }
   createResult(win, score, result) {
-    const bgTexture = "/assets/images/bgresult.png";
+    const bgTexture = "Result";
     const onresult = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite.from(bgTexture);
     onresult.width = 500;
     onresult.height = 500;
@@ -1247,7 +1247,7 @@ class ResultScene extends events__WEBPACK_IMPORTED_MODULE_2__.EventEmitter {
     bitmap.y = _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.height / 2 - 50;
     this.container.addChild(bitmap);
     const replayTexture = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from(
-      win ? "/assets/images/play.png" : "/assets/images/replay.png"
+      win ? "Play" : "Replay"
     );
     const replayButton = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite(replayTexture);
     replayButton.anchor.set(0.5);
@@ -1305,7 +1305,7 @@ class StarGame extends events__WEBPACK_IMPORTED_MODULE_2__.EventEmitter {
     this.createStart();
   }
   createStart() {
-    const bgTexture = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from("/assets/images/bgresult.png");
+    const bgTexture = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from("Result");
     const onresultStart = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite(bgTexture);
     onresultStart.width = 500;
     onresultStart.height = 500;
@@ -1313,7 +1313,7 @@ class StarGame extends events__WEBPACK_IMPORTED_MODULE_2__.EventEmitter {
     onresultStart.x = _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width / 2;
     onresultStart.y = _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.height / 2;
     this.container.addChild(onresultStart);
-    const playTexture = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from("/assets/images/play.png");
+    const playTexture = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from("Play");
     const playButton = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite(playTexture);
     playButton.anchor.set(0.5);
     playButton.width = 150;
@@ -1489,7 +1489,7 @@ class GameScene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     if (this.keys["a"] || this.keys["d"]) {
       const timeSinceLastShoot = currentTime - this.lastShootTime;
       if (timeSinceLastShoot >= this.shootInterval) {
-        const texture = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from("/assets/images/missile.png");
+        const texture = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from("Bullet");
         const bullet = new _script_game_Bullet__WEBPACK_IMPORTED_MODULE_3__.Bullet(
           texture,
           this._canonSprite.x + this.canonContainer.x,
@@ -1855,7 +1855,16 @@ const manifest = {
       name: "images",
       assets: {
         Bg: "assets/images/envirenement.png",
-        Cloud: "assets/images/cloud.jpg"
+        Cloud: "assets/images/cloud.jpg",
+        Canon: "assets/images/Canon.png",
+        TireCanon: "assets/images/TireCanon.png",
+        MeteorMin: "assets/images/meteorMin.png",
+        MeteorNor: "assets/images/meteorNormal.png",
+        MeteorMax: "assets/images/meteorMax.png",
+        Result: "assets/images/bgresult.png",
+        Play: "assets/images/play.png",
+        Replay: "assets/images/replay.png",
+        Bullet: "assets/images/missile.png"
       }
     },
     {
