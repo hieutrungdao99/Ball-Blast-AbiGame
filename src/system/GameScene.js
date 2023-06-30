@@ -153,7 +153,7 @@ export class GameScene extends Container {
             const timeSinceLastShoot = currentTime - this.lastShootTime;
             if (timeSinceLastShoot >= this.shootInterval) {
                 // Bắn đạn
-                const texture = Texture.from('/assets/images/missile.png');
+                const texture = Texture.from('Bullet');
                 const bullet = new Bullet(
                     texture,
                     this._canonSprite.x + this.canonContainer.x,
@@ -214,17 +214,16 @@ export class GameScene extends Container {
                                 )
                             ) {
                                 if (meteor === this.meteorMax) {
-                                    this.splitMeteor(meteor)                       
-                          }
-                          if (meteor === this.meteorNormal1) {
-                            this.splitMeteor2(meteor)                       
-                  }
+                                    this.splitMeteor(meteor);
+                                }
+                                if (meteor === this.meteorNormal1) {
+                                    this.splitMeteor2(meteor);
+                                }
                                 // Xử lý khi đạn va chạm với thiên thạch
                                 this.collisionCount += 1;
                                 this.bitmapText.collisionCount =
                                     this.collisionCount;
-                                this.bitmapText.text =
-                                    `Score: + (${this.collisionCount})`;
+                                this.bitmapText.text = `Score: + (${this.collisionCount})`;
                                 this.bulletsContainer.removeChild(bullet);
                                 this.meteorContainer.removeChild(meteor);
                                 // điều kiện thắng
@@ -343,33 +342,32 @@ export class GameScene extends Container {
         // Khởi động lại trò chơi
         Ticker.shared.start();
     }
-    splitMeteor(meteor){
-        const meteorNormal1 = new Meteor()
+    splitMeteor(meteor) {
+        const meteorNormal1 = new Meteor();
         this.meteorNormal1 = meteorNormal1.meteorSpriteNormal;
         meteorNormal1.position.x = meteor.position.x - meteor.width / 2;
         meteorNormal1.position.y = meteor.position.y;
-         this.meteorContainer.addChild(this.meteorNormal1);
+        this.meteorContainer.addChild(this.meteorNormal1);
         this.meteors.push(meteorNormal1);
-        const meteorNormal2 = new Meteor()
+        const meteorNormal2 = new Meteor();
         this.meteorNormal2 = meteorNormal2.meteorSpriteNormal;
         meteorNormal2.position.x = meteor.position.x - meteor.width / 2;
         meteorNormal2.position.y = meteor.position.y;
-         this.meteorContainer.addChild(this.meteorNormal2);
+        this.meteorContainer.addChild(this.meteorNormal2);
         this.meteors.push(meteorNormal2);
-        
     }
-    splitMeteor2(meteor){
-        const meteorMin1 = new Meteor()
+    splitMeteor2(meteor) {
+        const meteorMin1 = new Meteor();
         this.meteorMin1 = meteorMin1.meteorSpriteMin;
         meteorMin1.position.x = meteor.position.x - meteor.width / 2;
         meteorMin1.position.y = meteor.position.y;
-         this.meteorContainer.addChild(this.meteorMin1);
+        this.meteorContainer.addChild(this.meteorMin1);
         this.meteors.push(meteorMin1);
-        const meteorMin2 = new Meteor()
+        const meteorMin2 = new Meteor();
         this.meteorMin2 = meteorMin2.meteorSpriteMin;
         meteorMin2.position.x = meteor.position.x - meteor.width / 2;
         meteorMin2.position.y = meteor.position.y;
-         this.meteorContainer.addChild(this.meteorMin2);
+        this.meteorContainer.addChild(this.meteorMin2);
         this.meteors.push(meteorMin2);
     }
     hitTestRectangle(x1, y1, w1, h1, x2, y2, w2, h2) {

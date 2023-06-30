@@ -27,7 +27,7 @@ export class Meteor extends Container {
   }
 
   createMeteorMin() {
-    const meteorsMins = ["assets/images/meteorMin.png"];
+    const meteorsMins = ["MeteorMin"];
     this.meteorMin = new AnimatedSprite(meteorsMins.map((frame) => Texture.from(frame)));
     this.container.addChild(this.meteorMin);
     this.meteorMin.x = Math.random() < 0.5 ? 0 : Manager.width; 
@@ -40,7 +40,7 @@ export class Meteor extends Container {
   }
 
   createMeteorNormal() {
-    const meteorsNormals = ["assets/images/meteorNormal.png"];
+    const meteorsNormals = ["MeteorNor"];
     this.meteorNormal = new AnimatedSprite(meteorsNormals.map((frame) => Texture.from(frame)));
     this.container.addChild(this.meteorNormal);
     this.meteorNormal.x = Math.random() < 0.5 ? 0 : Manager.width
@@ -51,7 +51,7 @@ export class Meteor extends Container {
     this.meteorNormal.filters = [tintFilterNormal];
   }
   createMeteorMax() {
-    const meteorsMaxs = ["assets/images/meteorMax.png"];
+    const meteorsMaxs = ["MeteorMax"];
     this.meteorMax = new AnimatedSprite(meteorsMaxs.map((frame) => Texture.from(frame)));
     this.container.addChild(this.meteorMax);
     this.meteorMax.x = Math.random() < 0.5 ? 0 : Manager.width;
