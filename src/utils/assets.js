@@ -3,9 +3,8 @@ export const manifest = {
         {
             name: 'images',
             assets: {
-                Clampy: 'images/clampy.png',
-                Bg: 'images/envirenement.png',
-                Cloud: 'images/cloud.jpg',
+                Bg: 'assets/images/envirenement.png',
+                Cloud: 'assets/images/cloud.jpg',
             },
         },
         {
