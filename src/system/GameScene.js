@@ -11,12 +11,16 @@ export class GameScene extends Container {
     keys = {};
     minX;
     maxX;
+
     constructor() {
         super();
+
+        this.started = false;
         this.createBackground();
+        this.createStartGame();
         this.createCannon();
         this.sortChildren();
-        this.createMeteor();
+
         this.createPoint();
         this.collisionCount = 0;
         this.space = 5;
@@ -32,6 +36,18 @@ export class GameScene extends Container {
         });
 
         Ticker.shared.add(this.update, this);
+    }
+    createStartGame() {
+        this.startGame = new StarGame();
+
+        this.startGame.on('play', () => {
+            console.log('Clicked on play button');
+            this.started = true;
+            this.createMeteor();
+            this.startNewGame();
+            this.removeChild(this.startGame.container);
+        });
+        this.addChild(this.startGame.container);
     }
     createBackground() {
         // Create Background
@@ -115,7 +131,7 @@ export class GameScene extends Container {
         //xử lý bắn
         this.handleShoot(framesPassed);
         //xử lý va chạm
-        this.handleCollide(framesPassed);
+        if (this.started) this.handleCollide(framesPassed);
     }
 
     handleMove() {
@@ -293,7 +309,7 @@ export class GameScene extends Container {
         this.bitmapText.text = 'Point: 0';
         this.resultDisplayed = false;
 
-        //tạo thiên thạch mới
+        // //tạo thiên thạch mới
         this.setIntervalMeteorMin = setInterval(() => {
             const meteorMin = new Meteor();
             this.meteorMin = meteorMin.meteorSpriteMin;
