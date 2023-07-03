@@ -3,9 +3,17 @@ export const manifest = {
         {
             name: 'images',
             assets: {
-                Clampy: 'images/clampy.png',
-                Bg: 'images/envirenement.png',
-                Cloud: 'images/cloud.jpg',
+                Bg: 'assets/images/envirenement.png',
+                Cloud: 'assets/images/cloud.jpg',
+                Canon: 'assets/images/Canon.png',
+                TireCanon: 'assets/images/TireCanon.png',
+                MeteorMin: 'assets/images/meteorMin.png',
+                MeteorNor: 'assets/images/meteorNormal.png',
+                MeteorMax: 'assets/images/meteorMax.png',
+                Result: 'assets/images/bgresult.png',
+                Play: 'assets/images/play.png',
+                Replay: 'assets/images/replay.png',
+                Bullet: 'assets/images/missile.png',
             },
         },
         {

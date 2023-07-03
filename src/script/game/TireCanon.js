@@ -6,7 +6,7 @@ export class TireCanon {
         this.createTireCanon();
     }
     createTireCanon() {
-        this.tireCanon = Sprite.from('/assets/images/TireCanon.png');
+        this.tireCanon = Sprite.from('TireCanon');
         this.tireCanon.width = 50;
         this.tireCanon.height = 50;
         // this.tireCanon.anchor.set(0.5)

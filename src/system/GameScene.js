@@ -149,7 +149,7 @@ export class GameScene extends Container {
             const timeSinceLastShoot = currentTime - this.lastShootTime;
             if (timeSinceLastShoot >= this.shootInterval) {
                 // Bắn đạn
-                const texture = Texture.from('/assets/images/missile.png');
+                const texture = Texture.from('Bullet');
                 const bullet = new Bullet(
                     texture,
                     this._canonSprite.x + this.canonContainer.x,

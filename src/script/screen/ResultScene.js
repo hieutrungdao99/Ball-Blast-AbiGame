@@ -18,7 +18,7 @@ export class ResultScene extends EventEmitter {
     }
 
     createResult(win, score, result) {
-        const bgTexture = '/assets/images/bgresult.png';
+        const bgTexture = 'Result';
         const onresult = Sprite.from(bgTexture);
         onresult.width = 500;
         onresult.height = 500;
@@ -42,7 +42,7 @@ export class ResultScene extends EventEmitter {
         this.container.addChild(bitmap);
 
         const replayTexture = Texture.from(
-            win ? '/assets/images/play.png' : '/assets/images/replay.png',
+            win ? 'Play' : 'Replay',
         );
         const replayButton = new Sprite(replayTexture);
         replayButton.anchor.set(0.5);

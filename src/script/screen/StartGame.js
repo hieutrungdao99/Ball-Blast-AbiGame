@@ -10,7 +10,7 @@ export class StarGame extends EventEmitter {
     }
 
     createStart() {
-        const bgTexture = Texture.from('/assets/images/bgresult.png');
+        const bgTexture = Texture.from('Result');
         const onresultStart = new Sprite(bgTexture);
         onresultStart.width = 500;
         onresultStart.height = 500;
@@ -19,7 +19,7 @@ export class StarGame extends EventEmitter {
         onresultStart.y = Manager.height / 2;
         this.container.addChild(onresultStart);
 
-        const playTexture = Texture.from('/assets/images/play.png');
+        const playTexture = Texture.from('Play');
         const playButton = new Sprite(playTexture);
         playButton.anchor.set(0.5);
         playButton.width = 150;
