@@ -9,6 +9,7 @@ import {
 } from 'pixi.js';
 import { Manager } from '../../system/Manager';
 import { EventEmitter } from 'events';
+import { gsap } from 'gsap';
 
 export class ResultScene extends EventEmitter {
     constructor(win, score, result) {
@@ -40,10 +41,14 @@ export class ResultScene extends EventEmitter {
         bitmap.x = Manager.width / 2 - 80;
         bitmap.y = Manager.height / 2 - 50;
         this.container.addChild(bitmap);
+        gsap.to(bitmap, {
+            alpha: 0,
+            duration: 0.5,
+            repeat: -1,
+            yoyo: true,
+        });
 
-        const replayTexture = Texture.from(
-            win ? 'Play' : 'Replay',
-        );
+        const replayTexture = Texture.from(win ? 'Play' : 'Replay');
         const replayButton = new Sprite(replayTexture);
         replayButton.anchor.set(0.5);
         replayButton.width = 150;

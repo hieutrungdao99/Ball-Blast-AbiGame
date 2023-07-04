@@ -1,4 +1,4 @@
-import { Container, Ticker, Texture } from 'pixi.js';
+import { Container, Ticker, Texture, AnimatedSprite } from 'pixi.js';
 import { GameScreen } from '../script/screen/GameScreen';
 import { Canon } from '../script/game/Canon';
 import { Bullet } from '../script/game/Bullet';
@@ -20,7 +20,6 @@ export class GameScene extends Container {
         this.createStartGame();
         this.createCannon();
         this.sortChildren();
-        this.handleMove();
         this.createPoint();
         this.collisionCount = 0;
         this.space = 5;
@@ -49,8 +48,8 @@ export class GameScene extends Container {
         this.startGame = new StarGame();
 
         this.startGame.on('play', () => {
-            console.log('Clicked on play button');
             this.started = true;
+            this.handleMove();
             this.createMeteor();
             this.startNewGame();
             this.removeChild(this.startGame.container);
@@ -118,7 +117,7 @@ export class GameScene extends Container {
         //xử lý khung hình
         this.handleFrame(framesPassed);
         //xử lý bắn
-        this.handleShoot(framesPassed);
+        if (this.started) this.handleShoot(framesPassed);
         //xử lý va chạm
         if (this.started) this.handleCollide(framesPassed);
     }
@@ -220,7 +219,6 @@ export class GameScene extends Container {
                                 this.bitmapText.collisionCount =
                                     this.collisionCount;
                                 this.bitmapText.text = `Score: + (${this.collisionCount})`;
-                                this.bulletsContainer.removeChild(bullet);
                                 this.meteorContainer.removeChild(meteor);
                                 // điều kiện thắng
                                 if (
