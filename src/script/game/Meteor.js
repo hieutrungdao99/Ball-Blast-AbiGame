@@ -26,7 +26,7 @@ export class Meteor extends Container {
     this.createMeteorNormal(20);
     this.createMeteorMax(40);
     Ticker.shared.add(this.update, this);
-    this.initialScore = Score;
+    // this.initialScore = score;
   }
   
   createMeteorMin(score) {
