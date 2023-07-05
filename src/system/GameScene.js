@@ -309,24 +309,24 @@ export class GameScene extends Container {
         this.resultDisplayed = false;
 
         //tạo thiên thạch mới
-        this.setIntervalMeteorMin = setInterval(() => {
-            const meteorMin = new Meteor();
-            this.meteorMin = meteorMin.meteorSpriteMin;
-            this.meteors.push(meteorMin);
-            this.meteorContainer.addChild(this.meteorMin);
-        }, 1000);
-        this.setIntervalMeteorNormal = setInterval(() => {
-            const meteorNormal = new Meteor();
-            this.meteorNormal = meteorNormal.meteorSpriteNormal;
-            this.meteors.push(meteorNormal);
-            this.meteorContainer.addChild(this.meteorNormal);
-        }, 2000);
+        // this.setIntervalMeteorMin = setInterval(() => {
+        //     const meteorMin = new Meteor();
+        //     this.meteorMin = meteorMin.meteorSpriteMin;
+        //     this.meteors.push(meteorMin);
+        //     this.meteorContainer.addChild(this.meteorMin);
+        // }, 1000);
+        // this.setIntervalMeteorNormal = setInterval(() => {
+        //     const meteorNormal = new Meteor();
+        //     this.meteorNormal = meteorNormal.meteorSpriteNormal;
+        //     this.meteors.push(meteorNormal);
+        //     this.meteorContainer.addChild(this.meteorNormal);
+        // }, 2000);
         this.setIntervalMeteorMax = setInterval(() => {
             const meteorMax = new Meteor();
             this.meteorMax = meteorMax.meteorSpriteMax;
             this.meteors.push(meteorMax);
             this.meteorContainer.addChild(this.meteorMax);
-        }, 4000);
+        }, 3000);
         //xóa màn kết quả
         if (this.resultScene) {
             this.removeChild(this.resultScene.container);
