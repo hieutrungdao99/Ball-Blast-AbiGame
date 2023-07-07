@@ -23,6 +23,7 @@ export const manifest = {
                 Menu: 'assets/sounds/Menu.wav',
                 Shoot: 'assets/sounds/Shoot.wav',
                 Hit: 'assets/sounds/Hit.wav',
+                Dead: 'assets/sounds/bom2.mp3',
             },
         },
     ],

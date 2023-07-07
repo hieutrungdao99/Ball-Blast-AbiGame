@@ -27,15 +27,6 @@ export class GameScene extends Container {
         this.shootInterval = 150; //khoang cach dan
         this.resultDisplayed = false;
         this.meteorSpawner = new Spawner();
-
-        // //Event
-        // document.addEventListener('keydown', (e) => {
-        //     this.keys[e.key] = true;
-        // });
-        // document.addEventListener('keyup', (e) => {
-        //     this.keys[e.key] = false;
-        // });
-
         this.pointerIsDown = false;
         document.addEventListener('pointerdown', () => {
             this.pointerIsDown = true;
@@ -123,7 +114,7 @@ export class GameScene extends Container {
 
         document.addEventListener('pointermove', (event) => {
             if (this.pointerIsDown) {
-                sfx.play('Shoot');
+                sfx.play('Shoot', { volume: 0.1 });
                 if (previousX !== null) {
                     const distanceX = event.pageX - previousX;
                     this.moveCanon(distanceX);
@@ -190,19 +181,9 @@ export class GameScene extends Container {
                         let _meteor = meteor.getBounds();
                         if (meteor) {
                             if (
-                                // this.hitTestRectangle(
-                                //     _bullet.x,
-                                //     _bullet.y,
-                                //     bullet.width,
-                                //     bullet.height,
-                                //     _meteor.x,
-                                //     _meteor.y,
-                                //     meteor.width,
-                                //     meteor.height,
-                                // )
                                 AABBCollision(_bullet, _meteor)
                             ) {
-                                sfx.play('Hit');
+                                sfx.play('Hit', { volume: 0.1 });
                                 meteor.value--;
                                 if (meteor.value <= 0) {
                                     // Xóa thiên thạch nếu value đạt 0
@@ -219,7 +200,7 @@ export class GameScene extends Container {
 
                                 // điều kiện thắng
                                 if (
-                                    this.collisionCount >= 100 &&
+                                    this.collisionCount >= 200 &&
                                     !this.resultDisplayed
                                 ) {
                                     if (this.started) {
@@ -265,16 +246,6 @@ export class GameScene extends Container {
                     let _meteor = meteor.getBounds();
                     if (meteor) {
                         if (
-                            // this.hitTestRectangle(
-                            //     _canon.x,
-                            //     _canon.y,
-                            //     canon.width,
-                            //     canon.height,
-                            //     _meteor.x,
-                            //     _meteor.y,
-                            //     meteor.width,
-                            //     meteor.height,
-                            // )
                             AABBCollision(_canon, _meteor)
                         ) {
                             if (this.started) {
@@ -283,12 +254,13 @@ export class GameScene extends Container {
                                     i < this.meteorSpawner.spawns.length;
                                     i++
                                 ) {
+                                    sfx.play('Dead')
                                     const meteor = this.meteorSpawner.spawns[i];
                                     this.removeChild(meteor);
                                 }
                                 this.meteorSpawner.spawns = [];
                                 this.started = false;
-                                audio.muted(true);
+                                // audio.muted(true);
                             }
                             this.resultDisplayed = true;
                             this.resultScene = new ResultScene(
@@ -336,9 +308,6 @@ export class GameScene extends Container {
         // Khởi động lại trò chơi
         Ticker.shared.start();
     }
-    resetText() {}
-    // hitTestRectangle(x1, y1, w1, h1, x2, y2, w2, h2) {
-    //     return x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;
-    // }
-    resize() {}
+    resetText() { }
+    resize() { }
 }

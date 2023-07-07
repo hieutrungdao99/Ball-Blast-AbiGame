@@ -3,7 +3,7 @@ import { Manager } from "../../system/Manager";
 import * as PIXI from 'pixi.js';
 
 export class Meteor extends Container {
-  speedMeteorMinX = 0.5;
+  speedMeteorMinX = 1;
   speedMeteorMinY = 2;
   isMovingUp = true;
   maxHeight = 0;
@@ -19,11 +19,11 @@ export class Meteor extends Container {
     this.type = "meteorMin";
     this.addChild(this.meteorSprite);
     // Create and add the valueText object
-    this.valueText = new PIXI.Text(this.value.toString(), { fill: "black", fontSize: 20  });
+    this.valueText = new PIXI.Text(this.value.toString(), { fill: "black", fontSize: 20 });
     this.valueText.anchor.set(0.5);
     this.meteorSprite.addChild(this.valueText);
-    this.valueText.x = this.meteorSprite.x/2;
-    this.valueText.y = this.meteorSprite.y/2;
+    this.valueText.x = this.meteorSprite.x / 2;
+    this.valueText.y = this.meteorSprite.y / 2;
     Ticker.shared.add(this.update, this);
     this.x = 0;
     this.y = 0;
@@ -34,7 +34,7 @@ export class Meteor extends Container {
 
   update(deltaTime) {
 
-    
+
     this.valueText.text = this.value.toString();
 
     if (this.isMovingUp) {
@@ -59,6 +59,6 @@ export class Meteor extends Container {
       this.speedMeteorMinX = -Math.abs(this.speedMeteorMinX);
       this.meteorSprite.scale.x = -Math.abs(this.meteorSprite.scale.x);
     }
-  
+
   }
 }
