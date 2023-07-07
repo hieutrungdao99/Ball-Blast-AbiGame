@@ -101,22 +101,18 @@ export class GameScene extends Container {
         this.addChild(this.bitmapTextContainer);
     }
     update(framesPassed, deltaTime) {
-
-
         //xử lý khung hình
         this.handleFrame(framesPassed);
-        //xử lý bắn
-        if (this.started){ this.handleShoot(framesPassed);}
-        //xử lý va chạm
-        if (this.started){this.handleCollide(framesPassed);
+        if (this.started) {
+            //xử lý bắn
+            this.handleShoot(framesPassed);
+            //xử lý va chạm
+            this.handleCollide(framesPassed);
             this.meteorSpawner.spawns.forEach((meteor) => {
                 this.addChild(meteor);
                 meteor.update();
             });
-    
         }
-
-        
     }
 
     handleMove() {
@@ -184,11 +180,7 @@ export class GameScene extends Container {
                 if (bullet.y < -bullet.height) {
                     this.bulletsContainer.removeChild(bullet);
                 } else {
-                    for (
-                        let j = 0;
-                        j < this.meteorSpawner.spawns.length;
-                        j++
-                    ) {
+                    for (let j = 0; j < this.meteorSpawner.spawns.length; j++) {
                         const meteor = this.meteorSpawner.spawns[j];
                         let _bullet = bullet.getBounds();
                         let _meteor = meteor.getBounds();
@@ -205,14 +197,11 @@ export class GameScene extends Container {
                                     meteor.height,
                                 )
                             ) {
-
-
                                 // console.log('hit')
                                 this.meteorSpawner.spawns.splice(j, 1);
-                                this.removeChild(meteor)
+                                this.removeChild(meteor);
                                 this.bulletsContainer.removeChild(bullet);
 
-                               
                                 this.collisionCount += 1;
                                 this.bitmapText.collisionCount =
                                     this.collisionCount;
@@ -223,7 +212,6 @@ export class GameScene extends Container {
                                     this.collisionCount >= 10 &&
                                     !this.resultDisplayed
                                 ) {
-
                                     this.resultDisplayed = true;
                                     this.resultScene = new ResultScene(
                                         'win',
@@ -264,16 +252,27 @@ export class GameScene extends Container {
                                 meteor.height,
                             )
                         ) {
-                            console.log('hit')
-                           
-                            Ticker.shared.stop();
+                            if (this.started) {
+                                for (
+                                    let i = 0;
+                                    i < this.meteorSpawner.spawns.length;
+                                    i++
+                                ) {
+                                    const meteor = this.meteorSpawner.spawns[i];
+                                    this.removeChild(meteor);
+                                }
+                                this.meteorSpawner.spawns = [];
+                                this.started = false;
+                            }
                             this.resultDisplayed = true;
-                            this.resultScene = new ResultScene(result, this.collisionCount,);
+                            this.resultScene = new ResultScene(
+                                result,
+                                this.collisionCount,
+                            );
                             this.resultScene.on('replay', () => {
                                 this.startNewGame();
                             });
                             this.addChild(this.resultScene.container);
-
                         }
                     }
                 }
@@ -281,17 +280,14 @@ export class GameScene extends Container {
         }
     }
     startNewGame() {
-        // xóa thiên thạch cũ
-        this.meteorSpawner.spawns = [];
+        // Xóa thiên thạch cũ
         for (let i = 0; i < this.meteorSpawner.spawns.length; i++) {
             const meteor = this.meteorSpawner.spawns[i];
             this.removeChild(meteor);
-            this.meteorSpawner.removeSpawns();
-            this.meteorSpawner.removeAllSpawns();
-
         }
+        this.meteorSpawner.spawns = [];
 
-
+        // Xóa đạn
         for (let i = 0; i < this.bulletsContainer.children.length; i++) {
             const bullet = this.bulletsContainer.children[i];
             this.bulletsContainer.removeChild(bullet);
@@ -302,8 +298,9 @@ export class GameScene extends Container {
         this.bitmapText.collisionCount = 0;
         this.bitmapText.text = 'Score: 0';
         this.resultDisplayed = false;
+        this.started = true;
 
-        //xóa màn kết quả
+        // Xóa màn kết quả
         if (this.resultScene) {
             this.removeChild(this.resultScene.container);
             this.resultScene = null;
@@ -316,5 +313,5 @@ export class GameScene extends Container {
     hitTestRectangle(x1, y1, w1, h1, x2, y2, w2, h2) {
         return x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;
     }
-    resize() { }
+    resize() {}
 }
