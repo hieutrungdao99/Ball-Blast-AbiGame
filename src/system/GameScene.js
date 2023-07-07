@@ -106,15 +106,17 @@ export class GameScene extends Container {
         //xử lý khung hình
         this.handleFrame(framesPassed);
         //xử lý bắn
-        if (this.started) this.handleShoot(framesPassed);
+        if (this.started){ this.handleShoot(framesPassed);}
         //xử lý va chạm
-        if (this.started) this.handleCollide(framesPassed);
+        if (this.started){this.handleCollide(framesPassed);
+            this.meteorSpawner.spawns.forEach((meteor) => {
+                this.addChild(meteor);
+                meteor.update();
+            });
+    
+        }
 
-        this.meteorSpawner.spawns.forEach((meteor) => {
-            this.addChild(meteor);
-            meteor.update();
-        });
-
+        
     }
 
     handleMove() {
@@ -210,13 +212,7 @@ export class GameScene extends Container {
                                 this.removeChild(meteor)
                                 this.bulletsContainer.removeChild(bullet);
 
-                                // if (meteor === this.meteorMax) {
-                                //     this.splitMeteor(meteor);
-                                // }
-                                // if (meteor === this.meteorNormal1) {
-                                //     this.splitMeteor2(meteor);
-                                // }
-                                // Xử lý khi đạn va chạm với thiên thạch
+                               
                                 this.collisionCount += 1;
                                 this.bitmapText.collisionCount =
                                     this.collisionCount;
@@ -269,7 +265,7 @@ export class GameScene extends Container {
                             )
                         ) {
                             console.log('hit')
-                            clearInterval(this.meteorSpawner.spawn())
+                           
                             Ticker.shared.stop();
                             this.resultDisplayed = true;
                             this.resultScene = new ResultScene(result, this.collisionCount,);

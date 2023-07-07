@@ -2,7 +2,7 @@ import { Container, Sprite, Texture, Ticker } from "pixi.js";
 import { Manager } from "../../system/Manager";
 import * as PIXI from 'pixi.js';
 
-export class Meteor extends Container {
+export class Meteor2 extends Container {
   speedMeteorMinX = 1;
   speedMeteorMinY = 4;
   isMovingUp = true;
@@ -13,10 +13,10 @@ export class Meteor extends Container {
     super();
     this.value = value;
     this._maxScale = 1;
-    this.meteorTexture = PIXI.Texture.from('MeteorMin');
+    this.meteorTexture = PIXI.Texture.from('MeteorNormal');
     this.meteorSprite = new PIXI.Sprite(this.meteorTexture);
     this.meteorSprite.anchor.set(0.5);
-    this.type = "meteorMin";
+    this.type = "meteorNormal";
     this.addChild(this.meteorSprite);
     Ticker.shared.add(this.update, this);
 
