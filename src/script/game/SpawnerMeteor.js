@@ -6,7 +6,7 @@ import { Meteor3 } from "./MeteorObj3";
 export class Spawner {
     constructor() {
         const spawnInterval = 1000;
-        this.maxSpawns = 8;
+        this.maxSpawns = 5;
         this.spawns = [];
         this.isStopped = false;
         setInterval(() => this.spawn(), spawnInterval);
@@ -18,7 +18,7 @@ switch (randomType) {
         return "meteorMin";
         break;
         case 2:
-            return "meteorNormal";
+            return "meteorNor";
         
         break;
         case 3:
@@ -36,14 +36,14 @@ switch (randomType) {
             this.type = this.randomType();
             switch (this.type) {
                 case 'meteorMin':
-                    spawn = new Meteor()
+                    spawn = new Meteor(10)
                     break;
-                case 'meteorNormal':
-                    spawn = new Meteor2();
+                case 'meteorNor':
+                    spawn = new Meteor2(20);
                     
                     break; 
                 case 'meteorMax':
-                    spawn = new Meteor3();
+                    spawn = new Meteor3(40);
                     
                     break;
                 default:
