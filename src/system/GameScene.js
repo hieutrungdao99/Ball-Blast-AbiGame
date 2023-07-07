@@ -197,17 +197,13 @@ export class GameScene extends Container {
                                     meteor.height,
                                 )
                             ) {
-
-
-                                console.log('hit');
                                 meteor.value--;
                                 if (meteor.value <= 0) {
-                                  // Xóa thiên thạch nếu value đạt 0
-                                  this.meteorSpawner.spawns.splice(j, 1);
-                                  this.removeChild(meteor);
-
+                                    // Xóa thiên thạch nếu value đạt 0
+                                    this.meteorSpawner.spawns.splice(j, 1);
+                                    this.removeChild(meteor);
                                 }
-                                
+
                                 this.bulletsContainer.removeChild(bullet);
 
                                 this.collisionCount += 1;
@@ -220,6 +216,20 @@ export class GameScene extends Container {
                                     this.collisionCount >= 100 &&
                                     !this.resultDisplayed
                                 ) {
+                                    if (this.started) {
+                                        for (
+                                            let i = 0;
+                                            i <
+                                            this.meteorSpawner.spawns.length;
+                                            i++
+                                        ) {
+                                            const meteor =
+                                                this.meteorSpawner.spawns[i];
+                                            this.removeChild(meteor);
+                                        }
+                                        this.meteorSpawner.spawns = [];
+                                        this.started = false;
+                                    }
                                     this.resultDisplayed = true;
                                     this.resultScene = new ResultScene(
                                         'win',
@@ -317,9 +327,7 @@ export class GameScene extends Container {
         // Khởi động lại trò chơi
         Ticker.shared.start();
     }
-resetText() {
-    
-}
+    resetText() {}
     hitTestRectangle(x1, y1, w1, h1, x2, y2, w2, h2) {
         return x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;
     }
