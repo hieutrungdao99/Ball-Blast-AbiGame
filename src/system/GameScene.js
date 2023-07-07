@@ -197,9 +197,17 @@ export class GameScene extends Container {
                                     meteor.height,
                                 )
                             ) {
-                                // console.log('hit')
-                                this.meteorSpawner.spawns.splice(j, 1);
-                                this.removeChild(meteor);
+
+
+                                console.log('hit');
+                                meteor.value--;
+                                if (meteor.value <= 0) {
+                                  // Xóa thiên thạch nếu value đạt 0
+                                  this.meteorSpawner.spawns.splice(j, 1);
+                                  this.removeChild(meteor);
+
+                                }
+                                
                                 this.bulletsContainer.removeChild(bullet);
 
                                 this.collisionCount += 1;
@@ -209,7 +217,7 @@ export class GameScene extends Container {
 
                                 // điều kiện thắng
                                 if (
-                                    this.collisionCount >= 10 &&
+                                    this.collisionCount >= 100 &&
                                     !this.resultDisplayed
                                 ) {
                                     this.resultDisplayed = true;
@@ -309,7 +317,9 @@ export class GameScene extends Container {
         // Khởi động lại trò chơi
         Ticker.shared.start();
     }
-
+resetText() {
+    
+}
     hitTestRectangle(x1, y1, w1, h1, x2, y2, w2, h2) {
         return x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;
     }
