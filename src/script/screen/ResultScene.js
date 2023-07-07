@@ -10,6 +10,7 @@ import {
 import { Manager } from '../../system/Manager';
 import { EventEmitter } from 'events';
 import { gsap } from 'gsap';
+import { audio } from '../../utils/Sound';
 
 export class ResultScene extends EventEmitter {
     constructor(win, score, result) {

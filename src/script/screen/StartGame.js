@@ -2,12 +2,14 @@ import { Container, Sprite, TextStyle, Text, Texture, Tween } from 'pixi.js';
 import { Manager } from '../../system/Manager';
 import { EventEmitter } from 'events';
 import { gsap } from 'gsap';
+import { bgm } from '../../utils/Sound';
 
 export class StarGame extends EventEmitter {
     constructor() {
         super();
         this.container = new Container();
         this.createStart();
+        this.hasInteracted = false;
     }
 
     createStart() {
@@ -31,6 +33,11 @@ export class StarGame extends EventEmitter {
         playButton.buttonMode = true;
         playButton.on('pointerdown', () => {
             this.emit('play');
+            if (!this.hasInteracted) {
+                // Only play audio if it hasn't already been played
+                bgm.play('Battle');
+            }
+            this.hasInteracted = true;
         });
         this.container.addChild(playButton);
 

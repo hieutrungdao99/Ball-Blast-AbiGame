@@ -19,7 +19,10 @@ export const manifest = {
         {
             name: 'sound',
             assets: {
-                whistle: '',
+                Battle: 'assets/sounds/Battle.wav',
+                Menu: 'assets/sounds/Menu.wav',
+                Shoot: 'assets/sounds/Shoot.wav',
+                Hit: 'assets/sounds/Hit.wav',
             },
         },
     ],
