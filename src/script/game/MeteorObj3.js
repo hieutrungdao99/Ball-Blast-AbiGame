@@ -1,6 +1,7 @@
 import { Container, Sprite, Texture, Ticker, ColorMatrixFilter, Text } from "pixi.js";
 import { Manager } from "../../system/Manager";
 import * as PIXI from 'pixi.js';
+import { Meteor } from "./MeteorObj";
 
 export class Meteor3 extends Container {
   speedMeteorMinX = 0.5;
@@ -12,7 +13,6 @@ export class Meteor3 extends Container {
   constructor(value) {
     super();
     this.value = value;
-    this._maxScale = 1;
     this.meteorTexture = PIXI.Texture.from('MeteorMax');
     this.meteorSprite = new PIXI.Sprite(this.meteorTexture);
     this.meteorSprite.anchor.set(0.5);
@@ -27,14 +27,15 @@ export class Meteor3 extends Container {
     this.valueText.y = this.meteorSprite.y / 2;
     this.x = 0;
     this.y = 0;
+    this.rotationSpeed = 0.005;
     const meteorTintFilter = new ColorMatrixFilter();
     meteorTintFilter.tint(0xFF0000);
     this.meteorSprite.filters = [meteorTintFilter];
   }
 
   update(deltaTime) {
-
     this.valueText.text = this.value.toString();
+    this.meteorSprite.rotation += this.rotationSpeed;
     if (this.isMovingUp) {
       this.meteorSprite.y -= this.speedMeteorMinY
       if (this.meteorSprite.y <= Manager.height / 3) {

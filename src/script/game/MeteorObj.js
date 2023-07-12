@@ -12,7 +12,6 @@ export class Meteor extends Container {
   constructor(value) {
     super();
     this.value = value;
-    this._maxScale = 1;
     this.meteorTexture = PIXI.Texture.from('MeteorMin');
     this.meteorSprite = new PIXI.Sprite(this.meteorTexture);
     this.meteorSprite.anchor.set(0.5);
@@ -27,16 +26,15 @@ export class Meteor extends Container {
     Ticker.shared.add(this.update, this);
     this.x = 0;
     this.y = 0;
+    this.rotationSpeed = 0.008;
     const meteorTintFilter = new ColorMatrixFilter();
     meteorTintFilter.tint(0x00FF00); // Màu xanh lá
     this.meteorSprite.filters = [meteorTintFilter];
   }
 
   update(deltaTime) {
-
-
     this.valueText.text = this.value.toString();
-
+    this.meteorSprite.rotation += this.rotationSpeed;
     if (this.isMovingUp) {
       this.meteorSprite.y -= this.speedMeteorMinY;
       if (this.meteorSprite.y <= Manager.height / 3) {

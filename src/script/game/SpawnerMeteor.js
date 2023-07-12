@@ -1,10 +1,12 @@
+import { Container } from "pixi.js";
 import { Manager } from "../../system/Manager";
 import { Meteor } from "./MeteorObj";
 import { Meteor2 } from "./MeteorObj2";
 import { Meteor3 } from "./MeteorObj3";
 
-export class Spawner {
+export class Spawner extends Container {
     constructor() {
+        super();
         const spawnInterval = 1000;
         this.maxSpawns = 5;
         this.spawns = [];
@@ -33,18 +35,6 @@ export class Spawner {
             case 6:
                 return "meteorNor";
                 break;
-            // case 8:
-            //     return "meteorNor";
-
-            //     break;
-            // case 9:
-            //     return "meteorNor";
-
-            //     break;
-            // case 10:
-            //     return "meteorNor";
-
-            //     break;
 
             default:
                 break;
@@ -58,14 +48,14 @@ export class Spawner {
             this.type = this.randomType();
             switch (this.type) {
                 case 'meteorMin':
-                    spawn = new Meteor(10)
+                    spawn = new Meteor(1)
                     break;
                 case 'meteorNor':
-                    spawn = new Meteor2(20);
+                    spawn = new Meteor2(2);
 
                     break;
                 case 'meteorMax':
-                    spawn = new Meteor3(40);
+                    spawn = new Meteor3(4);
                     break;
                 default:
                     break;

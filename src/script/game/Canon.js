@@ -1,5 +1,6 @@
 import { Container, Sprite, Ticker } from 'pixi.js';
 import { Manager } from '../../system/Manager';
+import { fireCanon } from '../../../assets/particles/fireCanon.json'
 
 export class Canon {
     moveX = 0;

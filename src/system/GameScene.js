@@ -9,6 +9,10 @@ import { StarGame } from '../script/screen/StartGame';
 import { Spawner } from '../script/game/SpawnerMeteor';
 import { bgm, sfx, audio } from '../utils/Sound';
 import { AABBCollision } from '../utils/collision';
+import { Meteor2 } from '../script/game/MeteorObj2';
+import { Meteor } from '../script/game/MeteorObj';
+import { CanonEffect } from '../script/game/CanonEffect';
+
 export class GameScene extends Container {
     keys = {};
     minX;
@@ -19,6 +23,7 @@ export class GameScene extends Container {
         this.createBackground();
         this.createStartGame();
         this.createCannon();
+        this.effectCanon();
         this.sortChildren();
         this.createPoint();
         this.collisionCount = 0;
@@ -72,7 +77,8 @@ export class GameScene extends Container {
         this.canonContainer = new Container();
         this._canonSprite = canon.canonSprite;
         this.canonContainer.addChild(this._canonSprite);
-        this._canonSprite.zIndex = 0;
+
+        this._canonSprite.zIndex = 1;
         //Create TireCanon
         this.tireCanon = canon.tireCanonSprite;
         this.canonContainer.addChild(this.tireCanon);
@@ -86,6 +92,7 @@ export class GameScene extends Container {
         this.addChild(this.bulletsContainer);
         this.canonContainer.zIndex = 100;
         this.addChild(this.canonContainer);
+
     }
     createPoint() {
         this.bitmapTextContainer = new Container();
@@ -107,6 +114,7 @@ export class GameScene extends Container {
                 meteor.update();
             });
         }
+        this.effect.update()
     }
 
     handleMove() {
@@ -120,8 +128,12 @@ export class GameScene extends Container {
                     this.moveCanon(distanceX);
                 }
                 previousX = event.pageX;
+
+                console.log(this.effect);
             }
+
         });
+
     }
 
     moveCanon(distanceX) {
@@ -147,6 +159,7 @@ export class GameScene extends Container {
                 this.bulletsContainer.addChild(bullet);
                 this.lastShootTime = currentTime;
             }
+            this.effect.onPointerDown();
         }
         //xóa đạn khi vượt khỏi khung hình
         for (let i = 0; i < this.bulletsContainer.children.length; i++) {
@@ -189,10 +202,36 @@ export class GameScene extends Container {
                                     // Xóa thiên thạch nếu value đạt 0
                                     this.meteorSpawner.spawns.splice(j, 1);
                                     this.removeChild(meteor);
+                                    this.type = new Spawner(meteor.type)
+
+
+                                    // if (meteor.type === "meteorMax") {
+                                    //     console.log(1);
+                                    //     this.meteorNor1 = new Meteor2(2);
+                                    //     this.meteorNor2 = new Meteor2(2);
+
+                                    //     this.meteorSpawner.addChild(this.meteorNor1)
+                                    //     this.meteorSpawner.spawns.push(this.meteorNor1);
+
+                                    //     this.meteorSpawner.addChild(this.meteorNor2)
+                                    //     this.meteorSpawner.spawns.push(this.meteorNor2);
+                                    //     console.log(this.meteorNor1)
+                                    // }
+                                    if (meteor.type === "meteorNor") {
+                                        console.log(2);
+                                        this.meteorMin1 = new Meteor(2);
+                                        this.meteorMin2 = new Meteor(2);
+
+                                        this.meteorSpawner.addChild(this.meteorMin1)
+                                        this.meteorSpawner.spawns.push(this.meteorMin2);
+
+                                        this.meteorSpawner.addChild(this.meteorMin1)
+                                        this.meteorSpawner.spawns.push(this.meteorMin2);
+                                        console.log(this.meteorSpawner.spawn.length);
+                                    }
                                 }
 
                                 this.bulletsContainer.removeChild(bullet);
-
                                 this.collisionCount += 1;
                                 this.bitmapText.collisionCount =
                                     this.collisionCount;
@@ -307,6 +346,9 @@ export class GameScene extends Container {
 
         // Khởi động lại trò chơi
         Ticker.shared.start();
+    }
+    effectCanon() {
+        this.effect = new CanonEffect(this.canonContainer);
     }
     resetText() { }
     resize() { }
