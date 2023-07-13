@@ -33,6 +33,8 @@ export class GameScene extends Container {
         this.resultDisplayed = false;
         this.meteorSpawner = new Spawner();
         this.pointerIsDown = false;
+        // this.position.x = Manager.width / 2;
+        // this.position.y = Manager.height / 2;
         document.addEventListener('pointerdown', () => {
             this.pointerIsDown = true;
         });
@@ -66,7 +68,8 @@ export class GameScene extends Container {
         this.bg2.zIndex = 2;
         this.backgroundContainer.addChild(this.bg);
         this.backgroundContainer.addChild(this.bg2);
-
+        // this.bg.anchor.set(0.5)
+        // this.bg2.anchor.set(0.5)
         this.backgroundContainer.zIndex = 0;
         this.backgroundContainer.sortChildren();
         this.addChild(this.backgroundContainer);
@@ -78,13 +81,13 @@ export class GameScene extends Container {
         this._canonSprite = canon.canonSprite;
         this.canonContainer.addChild(this._canonSprite);
 
-        this._canonSprite.zIndex = 1;
+        this._canonSprite.zIndex = 10;
         //Create TireCanon
         this.tireCanon = canon.tireCanonSprite;
         this.canonContainer.addChild(this.tireCanon);
-        this.tireCanon.zIndex = 1;
+        this.tireCanon.zIndex = 10;
         this.tireCanon2 = canon.tireCanonSprite2;
-        this.tireCanon2.zIndex = 1;
+        this.tireCanon2.zIndex = 10;
         this.canonContainer.addChild(this.tireCanon2);
         this.canonContainer.sortChildren();
 
@@ -92,6 +95,8 @@ export class GameScene extends Container {
         this.addChild(this.bulletsContainer);
         this.canonContainer.zIndex = 100;
         this.addChild(this.canonContainer);
+        // this.canonContainer.position.x = Manager.width / 2;
+        // this.canonContainer.position.y = Manager.height / 2;
 
     }
     createPoint() {
@@ -115,6 +120,7 @@ export class GameScene extends Container {
             });
         }
         this.effect.update()
+        this.effect2.update2()
     }
 
     handleMove() {
@@ -129,7 +135,6 @@ export class GameScene extends Container {
                 }
                 previousX = event.pageX;
 
-                console.log(this.effect);
             }
 
         });
@@ -203,31 +208,17 @@ export class GameScene extends Container {
                                     this.meteorSpawner.spawns.splice(j, 1);
                                     this.removeChild(meteor);
                                     this.type = new Spawner(meteor.type)
-
-
-                                    // if (meteor.type === "meteorMax") {
-                                    //     console.log(1);
-                                    //     this.meteorNor1 = new Meteor2(2);
-                                    //     this.meteorNor2 = new Meteor2(2);
-
-                                    //     this.meteorSpawner.addChild(this.meteorNor1)
-                                    //     this.meteorSpawner.spawns.push(this.meteorNor1);
-
-                                    //     this.meteorSpawner.addChild(this.meteorNor2)
-                                    //     this.meteorSpawner.spawns.push(this.meteorNor2);
-                                    //     console.log(this.meteorNor1)
-                                    // }
                                     if (meteor.type === "meteorNor") {
-                                        console.log(2);
-                                        this.meteorMin1 = new Meteor(2);
-                                        this.meteorMin2 = new Meteor(2);
+                                        // console.log(2);
+                                        // this.meteorMin1 = new Meteor(2);
+                                        // this.meteorMin2 = new Meteor(2);
 
-                                        this.meteorSpawner.addChild(this.meteorMin1)
-                                        this.meteorSpawner.spawns.push(this.meteorMin2);
+                                        // this.meteorSpawner.addChild(this.meteorMin1)
+                                        // this.meteorSpawner.spawns.push(this.meteorMin2);
 
-                                        this.meteorSpawner.addChild(this.meteorMin1)
-                                        this.meteorSpawner.spawns.push(this.meteorMin2);
-                                        console.log(this.meteorSpawner.spawn.length);
+                                        // this.meteorSpawner.addChild(this.meteorMin1)
+                                        // this.meteorSpawner.spawns.push(this.meteorMin2);
+                                        // console.log(this.meteorSpawner.spawn.length);
                                     }
                                 }
 
@@ -294,6 +285,7 @@ export class GameScene extends Container {
                                     i++
                                 ) {
                                     sfx.play('Dead')
+                                    this.effect2._deadEffect()
                                     const meteor = this.meteorSpawner.spawns[i];
                                     this.removeChild(meteor);
                                 }
@@ -311,6 +303,8 @@ export class GameScene extends Container {
                                 audio.muted(false);
                             });
                             this.addChild(this.resultScene.container);
+                            this.canonContainer.removeChild(this.tireCanon);
+                            this.canonContainer.removeChild(this.tireCanon2);
                         }
                     }
                 }
@@ -336,6 +330,8 @@ export class GameScene extends Container {
         this.bitmapText.collisionCount = 0;
         this.bitmapText.text = 'Score: 0';
         this.resultDisplayed = false;
+        this.canonContainer.addChild(this.tireCanon)
+        this.canonContainer.addChild(this.tireCanon2)
         this.started = true;
 
         // Xóa màn kết quả
@@ -349,6 +345,7 @@ export class GameScene extends Container {
     }
     effectCanon() {
         this.effect = new CanonEffect(this.canonContainer);
+        this.effect2 = new CanonEffect(this._canonSprite)
     }
     resetText() { }
     resize() { }

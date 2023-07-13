@@ -15,6 +15,8 @@ export const manifest = {
                 Replay: 'assets/images/replay.png',
                 Bullet: 'assets/images/missile.png',
                 FireEffect: 'assets/images/particleFire.png',
+                BreakMeteorEffect: 'assets/images/particleMeteor.png',
+                BreakCanonEffect: 'assets/images/particleSmoke.png',
             },
         },
         {
