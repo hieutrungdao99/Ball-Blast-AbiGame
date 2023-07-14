@@ -226,7 +226,7 @@ export class GameScene extends Container {
                                 this.collisionCount += 1;
                                 this.bitmapText.collisionCount =
                                     this.collisionCount;
-                                this.bitmapText.text = `Score: + (${this.collisionCount})`;
+                                this.bitmapText.text = `Score: + (${ this.collisionCount })`;
 
                                 // điều kiện thắng
                                 if (
@@ -348,5 +348,8 @@ export class GameScene extends Container {
         this.effect2 = new CanonEffect(this._canonSprite)
     }
     resetText() { }
-    resize() { }
+    resize() {
+        this.backgroundContainer.width = Manager.width;
+        this.backgroundContainer.height = Manager.height;
+    }
 }
