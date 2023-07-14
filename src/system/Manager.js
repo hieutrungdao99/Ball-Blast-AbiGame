@@ -8,6 +8,7 @@ export class Manager {
     // We just modify our getters
     static get width() {
         // return Math.max(
+
         //     document.documentElement.clientWidth,
         //     window.innerWidth || 0,
         // );
@@ -15,6 +16,7 @@ export class Manager {
     }
     static get height() {
         // return Math.max(
+
         //     document.documentElement.clientHeight,
         //     window.innerHeight || 0,
         // );
@@ -58,15 +60,17 @@ export class Manager {
         this.app.view.height = this.height;
         let scale = this.windowWidth / this.width;
         style.transformOrigin = "0px 0px";
-        style.transform = `scale(${ scale })`;
+        style.transform = `scale(${scale})`;
         let vMargin = Math.floor((this.windowWidth - this.width * scale) / 2);
         let hMargin = Math.floor((this.windowHeight - this.height * scale) / 2);
 
-        style.margin = `${ hMargin }px ${ vMargin }px ${ hMargin }px ${ vMargin }px`;
+        style.margin = `${hMargin}px ${vMargin}px ${hMargin}px ${vMargin}px`;
         this.app.resizeTo = this.app.view;
         this.app.resize();
 
-        Manager.currentScene && Manager.currentScene.resize()
+        if (Manager.currentScene) {
+            Manager.currentScene.resize(Manager.width, Manager.height);
+        }
     }
 
     // Call this function when you want to go to a new scene

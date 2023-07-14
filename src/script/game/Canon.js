@@ -1,6 +1,5 @@
 import { Container, Sprite, Ticker } from 'pixi.js';
 import { Manager } from '../../system/Manager';
-import { fireCanon } from '../../../assets/particles/fireCanon.json'
 
 export class Canon {
     moveX = 0;
@@ -18,7 +17,6 @@ export class Canon {
         this._canon.anchor.set(0.5);
         this._canon.x = Manager.width / 2;
         this._canon.y = Manager.height - 100;
-
         this.container.addChild(this._canon);
     }
     getTireCanon() {

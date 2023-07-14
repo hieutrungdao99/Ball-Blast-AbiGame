@@ -10,8 +10,10 @@ export class Meteor3 extends Container {
   maxHeight = 0;
   minHeight = Manager.height - 100;
 
-  constructor(value) {
+  constructor(value, startX, startY) {
     super();
+    this.x = startX;
+    this.y = startY;
     this.value = value;
     this.meteorTexture = PIXI.Texture.from('MeteorMax');
     this.meteorSprite = new PIXI.Sprite(this.meteorTexture);
@@ -25,7 +27,7 @@ export class Meteor3 extends Container {
     this.meteorSprite.addChild(this.valueText);
     this.valueText.x = this.meteorSprite.x / 2;
     this.valueText.y = this.meteorSprite.y / 2;
-    this.x = 0;
+    this.x = Math.random() < 0.5 ? 0 : Manager.width;
     this.y = 0;
     this.rotationSpeed = 0.005;
     const meteorTintFilter = new ColorMatrixFilter();
@@ -36,27 +38,28 @@ export class Meteor3 extends Container {
   update(deltaTime) {
     this.valueText.text = this.value.toString();
     this.meteorSprite.rotation += this.rotationSpeed;
+
     if (this.isMovingUp) {
-      this.meteorSprite.y -= this.speedMeteorMinY
-      if (this.meteorSprite.y <= Manager.height / 3) {
+      this.y -= this.speedMeteorMinY;
+      if (this.y <= this.maxHeight) {
         this.isMovingUp = false;
       }
     } else {
-      this.meteorSprite.y += this.speedMeteorMinY
-      if (this.meteorSprite.y >= this.minHeight) {
+      this.y += this.speedMeteorMinY;
+      if (this.y >= this.minHeight) {
         this.isMovingUp = true;
       }
     }
-    this.meteorSprite.x += this.speedMeteorMinX
-    if (this.meteorSprite.x <= 0) {
-      this.meteorSprite.x = 0;
+    this.x += this.speedMeteorMinX;
+    if (this.x <= 0) {
+      this.x = 0;
       this.speedMeteorMinX = Math.abs(this.speedMeteorMinX);
-      this.meteorSprite.scale.x = Math.abs(this.meteorSprite.scale.x);
+      this.scale.x = Math.abs(this.scale.x);
     }
-    if (this.meteorSprite.x >= Manager.width) {
-      this.meteorSprite.x = Manager.width;
+    if (this.x >= Manager.width) {
+      this.x = Manager.width;
       this.speedMeteorMinX = -Math.abs(this.speedMeteorMinX);
-      this.meteorSprite.scale.x = -Math.abs(this.meteorSprite.scale.x);
+      this.scale.x = -Math.abs(this.scale.x);
     }
   }
 }

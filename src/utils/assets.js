@@ -22,11 +22,11 @@ export const manifest = {
         {
             name: 'sound',
             assets: {
-                Battle: 'assets/sounds/Battle.wav',
+                Battle: 'assets/sounds/backgroundSound.mp3',
                 Menu: 'assets/sounds/Menu.wav',
                 Shoot: 'assets/sounds/Shoot.wav',
-                Hit: 'assets/sounds/Hit.wav',
-                Dead: 'assets/sounds/bom2.mp3',
+                Hit: 'assets/sounds/fireSound.wav',
+                Dead: 'assets/sounds/soundOver.wav',
             },
         },
     ],

@@ -48,14 +48,14 @@ export class Spawner extends Container {
             this.type = this.randomType();
             switch (this.type) {
                 case 'meteorMin':
-                    spawn = new Meteor(1)
+                    spawn = new Meteor(5)
                     break;
                 case 'meteorNor':
-                    spawn = new Meteor2(2);
+                    spawn = new Meteor2(10);
 
                     break;
                 case 'meteorMax':
-                    spawn = new Meteor3(4);
+                    spawn = new Meteor3(15);
                     break;
                 default:
                     break;
