@@ -4411,14 +4411,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/index.mjs");
 /* harmony import */ var _system_Manager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../system/Manager */ "./src/system/Manager.js");
-/* harmony import */ var _assets_particles_fireCanon_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../assets/particles/fireCanon.json */ "./assets/particles/fireCanon.json");
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
-
 
 
 class Canon {
@@ -4531,6 +4529,45 @@ class CanonEffect {
 
 /***/ }),
 
+/***/ "./src/script/game/MeteorEffect.js":
+/*!*****************************************!*\
+  !*** ./src/script/game/MeteorEffect.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MeteorEffect: () => (/* binding */ MeteorEffect)
+/* harmony export */ });
+/* harmony import */ var _assets_particles_breakMeteor_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../assets/particles/breakMeteor.json */ "./assets/particles/breakMeteor.json");
+/* harmony import */ var _pixi_particle_emitter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @pixi/particle-emitter */ "./node_modules/@pixi/particle-emitter/lib/particle-emitter.es.js");
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/index.mjs");
+
+
+
+class MeteorEffect {
+  constructor(parent) {
+    this.parent = parent;
+    this.BreakEffect();
+  }
+  BreakEffect() {
+    let texture = pixi_js__WEBPACK_IMPORTED_MODULE_2__.Texture.from("BreakMeteorEffect");
+    this.emitter = new _pixi_particle_emitter__WEBPACK_IMPORTED_MODULE_1__.Emitter(this.parent, (0,_pixi_particle_emitter__WEBPACK_IMPORTED_MODULE_1__.upgradeConfig)(_assets_particles_breakMeteor_json__WEBPACK_IMPORTED_MODULE_0__, [texture]));
+    this.emitter.emit = false;
+    this.emitter.autoUpdate = true;
+  }
+  update() {
+    this.emitter.update();
+  }
+  _breakEffect() {
+    this.emitter.emit = true;
+  }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/game/MeteorObj.js":
 /*!**************************************!*\
   !*** ./src/script/game/MeteorObj.js ***!
@@ -4554,13 +4591,15 @@ var __publicField = (obj, key, value) => {
 
 
 class Meteor extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
-  constructor(value) {
+  constructor(value, startX, startY) {
     super();
     __publicField(this, "speedMeteorMinX", 1);
     __publicField(this, "speedMeteorMinY", 2);
     __publicField(this, "isMovingUp", true);
     __publicField(this, "maxHeight", 0);
     __publicField(this, "minHeight", _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.height - 100);
+    this.x = startX;
+    this.y = startY;
     this.value = value;
     this.meteorTexture = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from("MeteorMin");
     this.meteorSprite = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite(this.meteorTexture);
@@ -4573,7 +4612,7 @@ class Meteor extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     this.valueText.x = this.meteorSprite.x / 2;
     this.valueText.y = this.meteorSprite.y / 2;
     pixi_js__WEBPACK_IMPORTED_MODULE_0__.Ticker.shared.add(this.update, this);
-    this.x = 0;
+    this.x = Math.random() < 0.5 ? 0 : _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
     this.y = 0;
     this.rotationSpeed = 8e-3;
     const meteorTintFilter = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.ColorMatrixFilter();
@@ -4584,26 +4623,26 @@ class Meteor extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     this.valueText.text = this.value.toString();
     this.meteorSprite.rotation += this.rotationSpeed;
     if (this.isMovingUp) {
-      this.meteorSprite.y -= this.speedMeteorMinY;
-      if (this.meteorSprite.y <= _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.height / 3) {
+      this.y -= this.speedMeteorMinY;
+      if (this.y <= this.maxHeight) {
         this.isMovingUp = false;
       }
     } else {
-      this.meteorSprite.y += this.speedMeteorMinY;
-      if (this.meteorSprite.y >= this.minHeight) {
+      this.y += this.speedMeteorMinY;
+      if (this.y >= this.minHeight) {
         this.isMovingUp = true;
       }
     }
-    this.meteorSprite.x += this.speedMeteorMinX;
-    if (this.meteorSprite.x <= 0) {
-      this.meteorSprite.x = 0;
+    this.x += this.speedMeteorMinX;
+    if (this.x <= 0) {
+      this.x = 0;
       this.speedMeteorMinX = Math.abs(this.speedMeteorMinX);
-      this.meteorSprite.scale.x = Math.abs(this.meteorSprite.scale.x);
+      this.scale.x = Math.abs(this.scale.x);
     }
-    if (this.meteorSprite.x >= _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width) {
-      this.meteorSprite.x = _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
+    if (this.x >= _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width) {
+      this.x = _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
       this.speedMeteorMinX = -Math.abs(this.speedMeteorMinX);
-      this.meteorSprite.scale.x = -Math.abs(this.meteorSprite.scale.x);
+      this.scale.x = -Math.abs(this.scale.x);
     }
   }
 }
@@ -4636,13 +4675,15 @@ var __publicField = (obj, key, value) => {
 
 
 class Meteor2 extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
-  constructor(value) {
+  constructor(value, startX, startY) {
     super();
     __publicField(this, "speedMeteorMinX", 0.5);
     __publicField(this, "speedMeteorMinY", 2);
     __publicField(this, "isMovingUp", true);
     __publicField(this, "maxHeight", 0);
     __publicField(this, "minHeight", _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.height - 100);
+    this.x = startX;
+    this.y = startY;
     this.value = value;
     this.meteorTexture = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from("MeteorNor");
     this.meteorSprite = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite(this.meteorTexture);
@@ -4655,7 +4696,7 @@ class Meteor2 extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     this.meteorSprite.addChild(this.valueText);
     this.valueText.x = this.meteorSprite.x / 2;
     this.valueText.y = this.meteorSprite.y / 2;
-    this.x = 0;
+    this.x = Math.random() < 0.5 ? 0 : _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
     this.y = 0;
     this.rotationSpeed = 5e-3;
     const meteorTintFilter = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.ColorMatrixFilter();
@@ -4666,26 +4707,26 @@ class Meteor2 extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     this.valueText.text = this.value.toString();
     this.meteorSprite.rotation += this.rotationSpeed;
     if (this.isMovingUp) {
-      this.meteorSprite.y -= this.speedMeteorMinY;
-      if (this.meteorSprite.y <= _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.height / 3) {
+      this.y -= this.speedMeteorMinY;
+      if (this.y <= this.maxHeight) {
         this.isMovingUp = false;
       }
     } else {
-      this.meteorSprite.y += this.speedMeteorMinY;
-      if (this.meteorSprite.y >= this.minHeight) {
+      this.y += this.speedMeteorMinY;
+      if (this.y >= this.minHeight) {
         this.isMovingUp = true;
       }
     }
-    this.meteorSprite.x += this.speedMeteorMinX;
-    if (this.meteorSprite.x <= 0) {
-      this.meteorSprite.x = 0;
+    this.x += this.speedMeteorMinX;
+    if (this.x <= 0) {
+      this.x = 0;
       this.speedMeteorMinX = Math.abs(this.speedMeteorMinX);
-      this.meteorSprite.scale.x = Math.abs(this.meteorSprite.scale.x);
+      this.scale.x = Math.abs(this.scale.x);
     }
-    if (this.meteorSprite.x >= _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width) {
-      this.meteorSprite.x = _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
+    if (this.x >= _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width) {
+      this.x = _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
       this.speedMeteorMinX = -Math.abs(this.speedMeteorMinX);
-      this.meteorSprite.scale.x = -Math.abs(this.meteorSprite.scale.x);
+      this.scale.x = -Math.abs(this.scale.x);
     }
   }
 }
@@ -4718,13 +4759,15 @@ var __publicField = (obj, key, value) => {
 
 
 class Meteor3 extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
-  constructor(value) {
+  constructor(value, startX, startY) {
     super();
     __publicField(this, "speedMeteorMinX", 0.5);
     __publicField(this, "speedMeteorMinY", 1);
     __publicField(this, "isMovingUp", true);
     __publicField(this, "maxHeight", 0);
     __publicField(this, "minHeight", _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.height - 100);
+    this.x = startX;
+    this.y = startY;
     this.value = value;
     this.meteorTexture = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from("MeteorMax");
     this.meteorSprite = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite(this.meteorTexture);
@@ -4737,7 +4780,7 @@ class Meteor3 extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     this.meteorSprite.addChild(this.valueText);
     this.valueText.x = this.meteorSprite.x / 2;
     this.valueText.y = this.meteorSprite.y / 2;
-    this.x = 0;
+    this.x = Math.random() < 0.5 ? 0 : _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
     this.y = 0;
     this.rotationSpeed = 5e-3;
     const meteorTintFilter = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.ColorMatrixFilter();
@@ -4748,26 +4791,26 @@ class Meteor3 extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     this.valueText.text = this.value.toString();
     this.meteorSprite.rotation += this.rotationSpeed;
     if (this.isMovingUp) {
-      this.meteorSprite.y -= this.speedMeteorMinY;
-      if (this.meteorSprite.y <= _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.height / 3) {
+      this.y -= this.speedMeteorMinY;
+      if (this.y <= this.maxHeight) {
         this.isMovingUp = false;
       }
     } else {
-      this.meteorSprite.y += this.speedMeteorMinY;
-      if (this.meteorSprite.y >= this.minHeight) {
+      this.y += this.speedMeteorMinY;
+      if (this.y >= this.minHeight) {
         this.isMovingUp = true;
       }
     }
-    this.meteorSprite.x += this.speedMeteorMinX;
-    if (this.meteorSprite.x <= 0) {
-      this.meteorSprite.x = 0;
+    this.x += this.speedMeteorMinX;
+    if (this.x <= 0) {
+      this.x = 0;
       this.speedMeteorMinX = Math.abs(this.speedMeteorMinX);
-      this.meteorSprite.scale.x = Math.abs(this.meteorSprite.scale.x);
+      this.scale.x = Math.abs(this.scale.x);
     }
-    if (this.meteorSprite.x >= _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width) {
-      this.meteorSprite.x = _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
+    if (this.x >= _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width) {
+      this.x = _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width;
       this.speedMeteorMinX = -Math.abs(this.speedMeteorMinX);
-      this.meteorSprite.scale.x = -Math.abs(this.meteorSprite.scale.x);
+      this.scale.x = -Math.abs(this.scale.x);
     }
   }
 }
@@ -4836,13 +4879,13 @@ class Spawner extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
       this.type = this.randomType();
       switch (this.type) {
         case "meteorMin":
-          spawn = new _MeteorObj__WEBPACK_IMPORTED_MODULE_2__.Meteor(1);
+          spawn = new _MeteorObj__WEBPACK_IMPORTED_MODULE_2__.Meteor(5);
           break;
         case "meteorNor":
-          spawn = new _MeteorObj2__WEBPACK_IMPORTED_MODULE_3__.Meteor2(2);
+          spawn = new _MeteorObj2__WEBPACK_IMPORTED_MODULE_3__.Meteor2(10);
           break;
         case "meteorMax":
-          spawn = new _MeteorObj3__WEBPACK_IMPORTED_MODULE_4__.Meteor3(4);
+          spawn = new _MeteorObj3__WEBPACK_IMPORTED_MODULE_4__.Meteor3(15);
           break;
         default:
           break;
@@ -5171,12 +5214,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _script_game_MeteorObj2__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../script/game/MeteorObj2 */ "./src/script/game/MeteorObj2.js");
 /* harmony import */ var _script_game_MeteorObj__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../script/game/MeteorObj */ "./src/script/game/MeteorObj.js");
 /* harmony import */ var _script_game_CanonEffect__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../script/game/CanonEffect */ "./src/script/game/CanonEffect.js");
+/* harmony import */ var _script_game_MeteorEffect__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../script/game/MeteorEffect */ "./src/script/game/MeteorEffect.js");
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
+
 
 
 
@@ -5202,6 +5247,7 @@ class GameScene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     this.createStartGame();
     this.createCannon();
     this.effectCanon();
+    this.effectMeteor();
     this.sortChildren();
     this.createPoint();
     this.collisionCount = 0;
@@ -5281,6 +5327,7 @@ class GameScene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     }
     this.effect.update();
     this.effect2.update2();
+    this.effect3.update();
   }
   handleMove() {
     let previousX = null;
@@ -5352,11 +5399,12 @@ class GameScene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
             let _meteor = meteor.getBounds();
             if (meteor) {
               if ((0,_utils_collision__WEBPACK_IMPORTED_MODULE_10__.AABBCollision)(_bullet, _meteor)) {
-                _utils_Sound__WEBPACK_IMPORTED_MODULE_9__.sfx.play("Hit", { volume: 0.1 });
+                _utils_Sound__WEBPACK_IMPORTED_MODULE_9__.sfx.play("Hit", { volume: 1 });
                 meteor.value--;
                 if (meteor.value <= 0) {
                   this.meteorSpawner.spawns.splice(j, 1);
                   this.removeChild(meteor);
+                  this.effect3._breakEffect();
                   this.type = new _script_game_SpawnerMeteor__WEBPACK_IMPORTED_MODULE_8__.Spawner(meteor.type);
                   if (meteor.type === "meteorNor") {
                   }
@@ -5399,7 +5447,7 @@ class GameScene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
         const canon = this.canonContainer.children[i];
         for (let j = 0; j < this.meteorSpawner.spawns.length; j++) {
           const meteor = this.meteorSpawner.spawns[j];
-          let _canon = canon.getBounds();
+          let _canon = this._canonSprite.getBounds();
           let _meteor = meteor.getBounds();
           if (meteor) {
             if ((0,_utils_collision__WEBPACK_IMPORTED_MODULE_10__.AABBCollision)(_canon, _meteor)) {
@@ -5458,11 +5506,20 @@ class GameScene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     this.effect = new _script_game_CanonEffect__WEBPACK_IMPORTED_MODULE_13__.CanonEffect(this.canonContainer);
     this.effect2 = new _script_game_CanonEffect__WEBPACK_IMPORTED_MODULE_13__.CanonEffect(this._canonSprite);
   }
+  effectMeteor() {
+    this.effect3 = new _script_game_MeteorEffect__WEBPACK_IMPORTED_MODULE_14__.MeteorEffect(this.meteorSpawner);
+  }
   resetText() {
   }
   resize() {
     this.backgroundContainer.width = _Manager__WEBPACK_IMPORTED_MODULE_4__.Manager.width;
     this.backgroundContainer.height = _Manager__WEBPACK_IMPORTED_MODULE_4__.Manager.height;
+    this._canonSprite.x = _Manager__WEBPACK_IMPORTED_MODULE_4__.Manager.width / 2;
+    this._canonSprite.y = _Manager__WEBPACK_IMPORTED_MODULE_4__.Manager.height - 100;
+    this.tireCanon.x = this._canonSprite.x + 35;
+    this.tireCanon.y = this._canonSprite.y + 40;
+    this.tireCanon2.x = this._canonSprite.x - 40;
+    this.tireCanon2.y = this._canonSprite.y + 40;
   }
 }
 
@@ -5608,7 +5665,9 @@ class Manager {
     style.margin = `${hMargin}px ${vMargin}px ${hMargin}px ${vMargin}px`;
     this.app.resizeTo = this.app.view;
     this.app.resize();
-    Manager.currentScene && Manager.currentScene.resize();
+    if (Manager.currentScene) {
+      Manager.currentScene.resize(Manager.width, Manager.height);
+    }
   }
   // Call this function when you want to go to a new scene
   static changeScene(newScene) {
@@ -5840,11 +5899,11 @@ const manifest = {
     {
       name: "sound",
       assets: {
-        Battle: "assets/sounds/Battle.wav",
+        Battle: "assets/sounds/backgroundSound.mp3",
         Menu: "assets/sounds/Menu.wav",
         Shoot: "assets/sounds/Shoot.wav",
-        Hit: "assets/sounds/Hit.wav",
-        Dead: "assets/sounds/bom2.mp3"
+        Hit: "assets/sounds/fireSound.wav",
+        Dead: "assets/sounds/soundOver.wav"
       }
     }
   ]
@@ -51271,6 +51330,17 @@ module.exports = JSON.parse('{"alpha":{"start":0.74,"end":0.46},"scale":{"start"
 
 /***/ }),
 
+/***/ "./assets/particles/breakMeteor.json":
+/*!*******************************************!*\
+  !*** ./assets/particles/breakMeteor.json ***!
+  \*******************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse('{"alpha":{"start":1,"end":1},"scale":{"start":1,"end":2,"minimumScaleMultiplier":1},"color":{"start":"#ffffff","end":"#ff0022"},"speed":{"start":1000,"end":200,"minimumSpeedMultiplier":1},"acceleration":{"x":0,"y":0},"maxSpeed":0,"startRotation":{"min":1,"max":360},"noRotation":false,"rotationSpeed":{"min":0,"max":20},"lifetime":{"min":0.25,"max":0.5},"blendMode":"normal","frequency":0.001,"emitterLifetime":-1,"maxParticles":1000,"pos":{"x":0,"y":0},"addAtBack":false,"spawnType":"point"}');
+
+/***/ }),
+
 /***/ "./assets/particles/fireCanon.json":
 /*!*****************************************!*\
   !*** ./assets/particles/fireCanon.json ***!
@@ -51278,7 +51348,7 @@ module.exports = JSON.parse('{"alpha":{"start":0.74,"end":0.46},"scale":{"start"
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"alpha":{"start":0.14,"end":0.1},"scale":{"start":0.5,"end":1.5,"minimumScaleMultiplier":1.5},"color":{"start":"#fff191","end":"#f74200"},"speed":{"start":200,"end":200,"minimumSpeedMultiplier":1},"acceleration":{"x":0,"y":0},"maxSpeed":0,"startRotation":{"min":265,"max":275},"noRotation":false,"rotationSpeed":{"min":50,"max":50},"lifetime":{"min":0.1,"max":1},"blendMode":"normal","frequency":0.001,"emitterLifetime":0.5,"maxParticles":1000,"pos":{"x":0,"y":0},"addAtBack":false,"spawnType":"point"}');
+module.exports = JSON.parse('{"alpha":{"start":0.14,"end":0.1},"scale":{"start":0.3,"end":1.5,"minimumScaleMultiplier":1.5},"color":{"start":"#fff191","end":"#000000"},"speed":{"start":100,"end":100,"minimumSpeedMultiplier":1},"acceleration":{"x":0,"y":0},"maxSpeed":0,"startRotation":{"min":265,"max":275},"noRotation":false,"rotationSpeed":{"min":50,"max":50},"lifetime":{"min":0.1,"max":10},"blendMode":"normal","frequency":0.001,"emitterLifetime":0.5,"maxParticles":1000,"pos":{"x":0,"y":0},"addAtBack":false,"spawnType":"point"}');
 
 /***/ })
 
