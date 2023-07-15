@@ -1,8 +1,7 @@
 import fireCanon from '../../../assets/particles/fireCanon.json'
 import breakCanon from '../../../assets/particles/breakCanon.json'
 import { Emitter, upgradeConfig } from "@pixi/particle-emitter";
-import { Canon } from './Canon';
-import { Container, Texture } from 'pixi.js';
+import { Texture } from 'pixi.js';
 export class CanonEffect {
     constructor(parent) {
         this.parent = parent;
