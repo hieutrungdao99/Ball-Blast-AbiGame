@@ -18,8 +18,6 @@ export class Manager {
         // Create our pixi app
         Manager.app = new Application({
             view: document.getElementById('pixi-canvas'),
-            // resolution: window.devicePixelRatio || 1,
-            resizeTo: this.view,
             width: Manager.width,
             height: Manager.height,
             autoDensity: true,
@@ -33,28 +31,22 @@ export class Manager {
         // listen for the browser telling us that the screen size changed
         window.addEventListener('resize', Manager.resize(window.innerWidth, window.innerHeight));
     }
-    static resize(width, height) {
-        let style = this.app.view.style;
-        this.windowWidth = width;
-        this.windowHeight = height;
-        let ratio = Math.max(Manager.width / this.windowWidth, Manager.height / this.windowHeight);
-        Manager.app.width = this.windowWidth * ratio;
-        Manager.app.height = this.windowHeight * ratio;
-        Manager.app.view.width = this.width;
-        Manager.app.view.height = this.height;
-        let scale = this.windowWidth / this.width;
-        style.transformOrigin = "0px 0px";
-        style.transform = `scale(${ scale })`;
-        let vMargin = Math.floor((this.windowWidth - this.width * scale) / 2);
-        let hMargin = Math.floor((this.windowHeight - this.height * scale) / 2);
+    static resize() {
+        const screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        const screenHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-        style.margin = `${ hMargin }px ${ vMargin }px ${ hMargin }px ${ vMargin }px`;
-        Manager.app.resizeTo = Manager.app.view;
-        Manager.app.resize();
+        const scale = Math.min(screenWidth / Manager.width, screenHeight / Manager.height);
 
-        if (Manager.currentScene) {
-            Manager.currentScene.resize(window.innerWidth, window.innerHeight);
-        }
+        const enlargedWidth = Math.floor(scale * Manager.width);
+        const enlargedHeight = Math.floor(scale * Manager.height);
+
+        const horizontalMargin = (screenWidth - enlargedWidth) / 2;
+        const verticalMargin = (screenHeight - enlargedHeight) / 2;
+
+        this.app.view.style.width = `${enlargedWidth}px`;
+        this.app.view.style.height = `${enlargedHeight}px`;
+        this.app.view.style.marginLeft = this.app.view.style.marginRight = `${horizontalMargin}px`;
+        this.app.view.style.marginTop = this.app.view.style.marginBottom = `${verticalMargin}px`;
     }
 
     // Call this function when you want to go to a new scene
