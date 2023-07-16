@@ -32,22 +32,31 @@ export class Manager {
         window.addEventListener('resize', Manager.resize(window.innerWidth, window.innerHeight));
     }
     static resize() {
+        let width = Manager.width;
+        let height = Manager.height;
+    
+        // current screen size
         const screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
         const screenHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-
-        const scale = Math.min(screenWidth / Manager.width, screenHeight / Manager.height);
-
-        const enlargedWidth = Math.floor(scale * Manager.width);
-        const enlargedHeight = Math.floor(scale * Manager.height);
-
+    
+        // uniform scale for our game
+        const scale = Math.min(screenWidth / width, screenHeight / height);
+    
+        // the "uniformly englarged" size for our game
+        const enlargedWidth = Math.floor(scale * width);
+        const enlargedHeight = Math.floor(scale * height);
+    
+        // margins for centering our game
         const horizontalMargin = (screenWidth - enlargedWidth) / 2;
         const verticalMargin = (screenHeight - enlargedHeight) / 2;
-
-        this.app.view.style.width = `${enlargedWidth}px`;
-        this.app.view.style.height = `${enlargedHeight}px`;
-        this.app.view.style.marginLeft = this.app.view.style.marginRight = `${horizontalMargin}px`;
-        this.app.view.style.marginTop = this.app.view.style.marginBottom = `${verticalMargin}px`;
+    
+        // now we use css trickery to set the sizes and margins
+        Manager.app.view.style.width = `${enlargedWidth}px`;
+        Manager.app.view.style.height = `${enlargedHeight}px`;
+        Manager.app.view.style.marginLeft = Manager.app.view.style.marginRight = `${horizontalMargin}px`;
+        Manager.app.view.style.marginTop = Manager.app.view.style.marginBottom = `${verticalMargin}px`;
     }
+    
 
     // Call this function when you want to go to a new scene
     static changeScene(newScene) {
