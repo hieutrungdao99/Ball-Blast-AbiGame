@@ -55,7 +55,7 @@ export class Spawner extends Container {
 
                     break;
                 case 'meteorMax':
-                    spawn = new Meteor3(15);
+                    spawn = new Meteor3(20);
                     break;
                 default:
                     break;

@@ -15,7 +15,6 @@ export class MeteorEffect {
     }
 
     update() {
-        // this.emitter.updateSpawnPos(this.parent.getBounds().x + this.parent.width / 2, this.parent.getBounds().y);
         this.emitter.update();
     }
     _breakEffect() {

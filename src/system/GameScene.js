@@ -1,4 +1,4 @@
-import { Container, Ticker, Texture, AnimatedSprite } from 'pixi.js';
+import { Container, Ticker, Texture } from 'pixi.js';
 import { GameScreen } from '../script/screen/Background';
 import { Canon } from '../script/game/Canon';
 import { Bullet } from '../script/game/Bullet';
@@ -10,6 +10,9 @@ import { Spawner } from '../script/game/SpawnerMeteor';
 import { sfx, audio } from '../utils/Sound';
 import { AABBCollision } from '../utils/collision';
 import { CanonEffect } from '../script/game/CanonEffect';
+import { Meteor2 } from '../script/game/MeteorObj2';
+import { Meteor } from '../script/game/MeteorObj';
+
 
 export class GameScene extends Container {
     keys = {};
@@ -92,7 +95,6 @@ export class GameScene extends Container {
         this.addChild(this.bulletsContainer);
         this.canonContainer.zIndex = 100;
         this.addChild(this.canonContainer);
-
     }
     createPoint() {
         this.bitmapTextContainer = new Container();
@@ -114,8 +116,8 @@ export class GameScene extends Container {
                 meteor.update();
             });
         }
-        this.effect.update()
-        this.effect2.update2()
+        // this.effect.update()
+        this.effect.update();
     }
 
     handleMove() {
@@ -129,11 +131,8 @@ export class GameScene extends Container {
                     this.moveCanon(distanceX);
                 }
                 previousX = adjustedX;
-
             }
-
         });
-
     }
 
     moveCanon(distanceX) {
@@ -160,7 +159,7 @@ export class GameScene extends Container {
                 this.bulletsContainer.addChild(bullet);
                 this.lastShootTime = currentTime;
             }
-            this.effect.onPointerDown();
+            // this.effect.onPointerDown();
         }
         //xóa đạn khi vượt khỏi khung hình
         for (let i = 0; i < this.bulletsContainer.children.length; i++) {
@@ -190,39 +189,18 @@ export class GameScene extends Container {
                     this.bulletsContainer.removeChild(bullet);
                 } else {
                     for (let j = 0; j < this.meteorSpawner.spawns.length; j++) {
-                        const meteor = this.meteorSpawner.spawns[j];
+                        let meteor = this.meteorSpawner.spawns[j];
                         let _bullet = bullet.getBounds();
                         let _meteor = meteor.getBounds();
                         if (meteor) {
-                            if (
-                                AABBCollision(_bullet, _meteor)
-                            ) {
+                            if (AABBCollision(_bullet, _meteor)) {
                                 sfx.play('Hit', { volume: 0.1 });
                                 meteor.value--;
-                                if (meteor.value <= 0) {
-                                    // Xóa thiên thạch nếu value đạt 0
-                                    this.meteorSpawner.spawns.splice(j, 1);
-                                    this.removeChild(meteor);
-                                    this.type = new Spawner(meteor.type)
-                                    if (meteor.type === "meteorNor") {
-                                        // console.log(2);
-                                        // this.meteorMin1 = new Meteor(2);
-                                        // this.meteorMin2 = new Meteor(2);
-
-                                        // this.meteorSpawner.addChild(this.meteorMin1)
-                                        // this.meteorSpawner.spawns.push(this.meteorMin2);
-
-                                        // this.meteorSpawner.addChild(this.meteorMin1)
-                                        // this.meteorSpawner.spawns.push(this.meteorMin2);
-                                        // console.log(this.meteorSpawner.spawn.length);
-                                    }
-                                }
-
+                                this.handleMeteorCollision();
                                 this.bulletsContainer.removeChild(bullet);
                                 this.collisionCount += 1;
-                                this.bitmapText.collisionCount =
-                                    this.collisionCount;
-                                this.bitmapText.text = `Score: + (${ this.collisionCount })`;
+                                this.bitmapText.collisionCount = this.collisionCount;
+                                this.bitmapText.text = `Score: + (${this.collisionCount})`;
 
                                 // điều kiện thắng
                                 if (
@@ -232,12 +210,10 @@ export class GameScene extends Container {
                                     if (this.started) {
                                         for (
                                             let i = 0;
-                                            i <
-                                            this.meteorSpawner.spawns.length;
+                                            i < this.meteorSpawner.spawns.length;
                                             i++
                                         ) {
-                                            const meteor =
-                                                this.meteorSpawner.spawns[i];
+                                            const meteor = this.meteorSpawner.spawns[i];
                                             this.removeChild(meteor);
                                         }
                                         this.meteorSpawner.spawns = [];
@@ -271,23 +247,20 @@ export class GameScene extends Container {
                     let _canon = canon.getBounds();
                     let _meteor = meteor.getBounds();
                     if (meteor) {
-                        if (
-                            AABBCollision(_canon, _meteor)
-                        ) {
+                        if (AABBCollision(_canon, _meteor)) {
                             if (this.started) {
                                 for (
                                     let i = 0;
                                     i < this.meteorSpawner.spawns.length;
                                     i++
                                 ) {
-                                    sfx.play('Dead')
-                                    this.effect2._deadEffect()
+                                    sfx.play('Dead');
+                                    this.effect._deadEffect();
                                     const meteor = this.meteorSpawner.spawns[i];
                                     this.removeChild(meteor);
                                 }
                                 this.meteorSpawner.spawns = [];
                                 this.started = false;
-                                // audio.muted(true);
                             }
                             this.resultDisplayed = true;
                             this.resultScene = new ResultScene(
@@ -303,6 +276,36 @@ export class GameScene extends Container {
                             this.canonContainer.removeChild(this.tireCanon2);
                         }
                     }
+                }
+            }
+        }
+    }
+    handleMeteorCollision() {
+        for (let i = 0; i < this.meteorSpawner.spawns.length; i++) {
+            let meteor = this.meteorSpawner.spawns[i];
+            if (meteor && meteor.value <= 0) {
+                // Xóa thiên thạch hiện tại
+                let pos = this.meteorSpawner.spawns[i].position;
+                let globalPos = this.toGlobal(pos);
+                this.meteorSpawner.spawns.splice(i, 1);
+                this.removeChild(meteor);
+                if (meteor.type == 'meteorMax') {
+                    let localPos = this.toLocal(globalPos);
+                    this.meteorNor1 = new Meteor2(10, localPos.x + 30, localPos.y);
+                    this.meteorNor2 = new Meteor2(10, localPos.x - 30, localPos.y);
+
+                    this.meteorNor1.speedMeteorMinX = 1;
+                    this.meteorNor2.speedMeteorMinX = -1;
+                    this.meteorSpawner.spawns.push(this.meteorNor1, this.meteorNor2);
+                }
+                if (meteor.type == 'meteorNor') {
+                    let localPos = this.toLocal(globalPos);
+                    this.meteorMin1 = new Meteor(5, localPos.x, localPos.y);
+                    this.meteorMin2 = new Meteor(5, localPos.x, localPos.y);
+
+                    this.meteorMin1.speedMeteorMinX = 2;
+                    this.meteorMin2.speedMeteorMinX = -2;
+                    this.meteorSpawner.spawns.push(this.meteorMin1, this.meteorMin2);
                 }
             }
         }
@@ -326,8 +329,8 @@ export class GameScene extends Container {
         this.bitmapText.collisionCount = 0;
         this.bitmapText.text = 'Score: 0';
         this.resultDisplayed = false;
-        this.canonContainer.addChild(this.tireCanon)
-        this.canonContainer.addChild(this.tireCanon2)
+        this.canonContainer.addChild(this.tireCanon);
+        this.canonContainer.addChild(this.tireCanon2);
         this.started = true;
 
         // Xóa màn kết quả
@@ -340,8 +343,8 @@ export class GameScene extends Container {
         Ticker.shared.start();
     }
     effectCanon() {
-        this.effect = new CanonEffect(this.canonContainer);
-        this.effect2 = new CanonEffect(this._canonSprite)
+        // this.effect = new CanonEffect(this.canonContainer);
+        this.effect = new CanonEffect(this._canonSprite);
     }
     resetText() { }
     resize() {

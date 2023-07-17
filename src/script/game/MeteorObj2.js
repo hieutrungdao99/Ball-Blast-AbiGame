@@ -7,11 +7,11 @@ import { Meteor } from "./MeteorObj";
 export class Meteor2 extends Container {
   speedMeteorMinX = 0.5;
   speedMeteorMinY = 2;
-  isMovingUp = true;
+  isMovingUp = false;
   maxHeight = 0;
   minHeight = Manager.height - 100;
 
-  constructor(value, startX, startY) {
+  constructor(value, startX = Math.random() < 0.5 ? 0 : Manager.width, startY = 0) {
     super();
     this.x = startX;
     this.y = startY;
@@ -28,9 +28,7 @@ export class Meteor2 extends Container {
     this.meteorSprite.addChild(this.valueText);
     this.valueText.x = this.meteorSprite.x / 2;
     this.valueText.y = this.meteorSprite.y / 2;
-    this.x = Math.random() < 0.5 ? 0 : Manager.width;
 
-    this.y = 0;
     this.rotationSpeed = 0.005;
     const meteorTintFilter = new ColorMatrixFilter();
     meteorTintFilter.tint(0x0000FF);
@@ -64,4 +62,8 @@ export class Meteor2 extends Container {
       this.scale.x = -Math.abs(this.scale.x);
     }
   }
+
+
+
+
 }

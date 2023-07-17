@@ -5,11 +5,11 @@ import * as PIXI from 'pixi.js';
 export class Meteor extends Container {
   speedMeteorMinX = 1;
   speedMeteorMinY = 2;
-  isMovingUp = true;
+  isMovingUp = false;
   maxHeight = 0;
   minHeight = Manager.height - 100;
 
-  constructor(value, startX, startY) {
+  constructor(value, startX = Math.random() < 0.5 ? 0 : Manager.width, startY = 0) {
     super();
     this.x = startX;
     this.y = startY;
@@ -26,8 +26,8 @@ export class Meteor extends Container {
     this.valueText.x = this.meteorSprite.x / 2;
     this.valueText.y = this.meteorSprite.y / 2;
     Ticker.shared.add(this.update, this);
-    this.x = Math.random() < 0.5 ? 0 : Manager.width;
-    this.y = 0;
+
+
     this.rotationSpeed = 0.008;
     const meteorTintFilter = new ColorMatrixFilter();
     meteorTintFilter.tint(0x00FF00);
