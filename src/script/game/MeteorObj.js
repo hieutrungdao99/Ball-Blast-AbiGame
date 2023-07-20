@@ -1,4 +1,4 @@
-import { Container, Sprite, Texture, Ticker, ColorMatrixFilter, Text } from "pixi.js";
+import { Container, Sprite, Texture, Ticker, ColorMatrixFilter, Text, Graphics } from "pixi.js";
 import { Manager } from "../../system/Manager";
 import * as PIXI from 'pixi.js';
 
@@ -19,6 +19,15 @@ export class Meteor extends Container {
     this.meteorSprite.anchor.set(0.5);
     this.type = "meteorMin";
     this.addChild(this.meteorSprite);
+
+    this.container = new Graphics();
+    this.container.x = 0;
+    this.container.y = 0;
+    this.container.beginFill('0xFFFFFF');
+    this.container.drawCircle(0, 0, this.meteorSprite.width / 2 * 0.4);
+    this.container.endFill();
+    this.container.alpha = 0;
+    this.meteorSprite.addChild(this.container);
 
     this.valueText = new PIXI.Text(this.value.toString(), { fill: "black", fontSize: 20 });
     this.valueText.anchor.set(0.5);
