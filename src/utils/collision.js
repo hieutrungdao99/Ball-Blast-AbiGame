@@ -10,3 +10,15 @@ export function AABBCollision(objA, objB) {
         return false;
     }
 }
+
+export function circleCollision(objA, objB) {
+    const distanceX = objA.x - objB.x;
+    const distanceY = objA.y - objB.y;
+    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+    if (distance < objA.radius + objB.radius) {
+        return true;
+    } else {
+        return false;
+    }
+}
