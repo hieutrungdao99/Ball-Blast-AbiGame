@@ -8,7 +8,7 @@ import { ResultScene } from '../script/screen/ResultScene';
 import { StarGame } from '../script/screen/StartGame';
 import { Spawner } from '../script/game/SpawnerMeteor';
 import { sfx, audio } from '../utils/Sound';
-import { AABBCollision } from '../utils/collision';
+import { AABBCollision, circleCollision } from '../utils/collision';
 import { CanonEffect } from '../script/game/CanonEffect';
 import { Meteor2 } from '../script/game/MeteorObj2';
 import { Meteor } from '../script/game/MeteorObj';
@@ -158,7 +158,25 @@ export class GameScene extends Container {
                 );
                 this.bulletsContainer.addChild(bullet);
                 this.lastShootTime = currentTime;
+                const bullet2 = new Bullet(
+                    texture,
+                    this._canonSprite.x + this.canonContainer.x + 30,
+                    this._canonSprite.y - 40,
+                    10, //speed
+                    0.7, //scale
+                );
+                this.bulletsContainer.addChild(bullet2);
+                const bullet3 = new Bullet(
+                    texture,
+                    this._canonSprite.x + this.canonContainer.x - 30,
+                    this._canonSprite.y - 40,
+                    10, //speed
+                    0.7, //scale
+                );
+                this.bulletsContainer.addChild(bullet3);
+
             }
+
             // this.effect.onPointerDown();
         }
         //xóa đạn khi vượt khỏi khung hình
@@ -167,6 +185,13 @@ export class GameScene extends Container {
             bullet.update(framesPassed);
             if (bullet.y < -bullet.height) {
                 this.bulletsContainer.removeChild(bullet);
+            }
+        }
+        for (let i = 0; i < this.bulletsContainer.children.length; i++) {
+            const bullet2 = this.bulletsContainer.children[i];
+            bullet2.update(framesPassed);
+            if (bullet2.y < -bullet2.height) {
+                this.bulletsContainer.removeChild(bullet2);
             }
         }
     }
@@ -245,9 +270,22 @@ export class GameScene extends Container {
                 for (let j = 0; j < this.meteorSpawner.spawns.length; j++) {
                     const meteor = this.meteorSpawner.spawns[j];
                     let _canon = canon.getBounds();
-                    let _meteor = meteor.getBounds();
+                    let _meteor = meteor.container.getBounds();
+                    const canonCenter = {
+                        x: _canon.x + _canon.width / 2,
+                        y: _canon.y + _canon.height / 2
+                    };
+
+                    const meteorCenter = {
+                        x: _meteor.x + _meteor.width / 2,
+                        y: _meteor.y + _meteor.height / 2
+                    };
+
+                    const canonRadius = Math.max(_canon.width, _canon.height) / 2;
+                    const meteorRadius = Math.max(_meteor.width, _meteor.height) / 2;
                     if (meteor) {
-                        if (AABBCollision(_canon, _meteor)) {
+                        if (circleCollision({ x: canonCenter.x, y: canonCenter.y, radius: canonRadius },
+                            { x: meteorCenter.x, y: meteorCenter.y, radius: meteorRadius })) {
                             if (this.started) {
                                 for (
                                     let i = 0;
