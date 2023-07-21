@@ -1,6 +1,6 @@
 import breakMeteor from '../../../assets/particles/breakMeteor.json'
 import { Emitter, upgradeConfig } from "@pixi/particle-emitter";
-import { Container, Texture } from 'pixi.js';
+import { Texture } from 'pixi.js';
 export class MeteorEffect {
     constructor(parent) {
         this.parent = parent;
@@ -15,6 +15,7 @@ export class MeteorEffect {
     }
 
     update() {
+        // this.emitter.updateSpawnPos(this.parent.x, this.parent.y);
         this.emitter.update();
     }
     _breakEffect() {

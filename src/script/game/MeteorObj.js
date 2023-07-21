@@ -41,6 +41,7 @@ export class Meteor extends Container {
     const meteorTintFilter = new ColorMatrixFilter();
     meteorTintFilter.tint(0x00FF00);
     this.meteorSprite.filters = [meteorTintFilter];
+
   }
 
   update(deltaTime) {
@@ -58,7 +59,6 @@ export class Meteor extends Container {
         this.isMovingUp = true;
       }
     }
-
     this.x += this.speedMeteorMinX;
     if (this.x <= 0) {
       this.x = 0;
@@ -70,6 +70,6 @@ export class Meteor extends Container {
       this.speedMeteorMinX = -Math.abs(this.speedMeteorMinX);
       this.scale.x = -Math.abs(this.scale.x);
     }
-  }
 
+  }
 }

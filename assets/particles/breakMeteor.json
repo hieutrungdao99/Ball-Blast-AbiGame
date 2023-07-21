@@ -5,7 +5,7 @@
 	},
 	"scale": {
 		"start": 1,
-		"end": 2,
+		"end": 1,
 		"minimumScaleMultiplier": 1
 	},
 	"color": {
@@ -14,7 +14,7 @@
 	},
 	"speed": {
 		"start": 1000,
-		"end": 200,
+		"end": 0,
 		"minimumSpeedMultiplier": 1
 	},
 	"acceleration": {
@@ -37,7 +37,7 @@
 	},
 	"blendMode": "normal",
 	"frequency": 0.001,
-	"emitterLifetime": -1,
+	"emitterLifetime": 1,
 	"maxParticles": 1000,
 	"pos": {
 		"x": 0,

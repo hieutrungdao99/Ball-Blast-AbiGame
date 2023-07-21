@@ -12,7 +12,7 @@ import { AABBCollision, circleCollision } from '../utils/collision';
 import { CanonEffect } from '../script/game/CanonEffect';
 import { Meteor2 } from '../script/game/MeteorObj2';
 import { Meteor } from '../script/game/MeteorObj';
-
+import { MeteorEffect } from '../script/game/MeteorEffect';
 
 export class GameScene extends Container {
     keys = {};
@@ -25,6 +25,7 @@ export class GameScene extends Container {
         this.createStartGame();
         this.createCannon();
         this.effectCanon();
+        this.efftectMeteor();
         this.sortChildren();
         this.createPoint();
         this.collisionCount = 0;
@@ -118,23 +119,29 @@ export class GameScene extends Container {
         }
         // this.effect.update()
         this.effect.update();
+        this.effect2.update();
     }
-
     handleMove() {
         let previousX = null;
+        let isMoving = false;
         const scale = 0.5;
         document.addEventListener('pointermove', (event) => {
             if (this.pointerIsDown) {
-                const adjustedX = event.pageX / scale;
-                if (previousX !== null) {
+                if (!isMoving) {
+                    isMoving = true;
+                    previousX = event.pageX / scale;
+                } else {
+                    const adjustedX = event.pageX / scale;
                     const distanceX = adjustedX - previousX;
                     this.moveCanon(distanceX);
+                    previousX = adjustedX;
                 }
-                previousX = adjustedX;
+            } else {
+                previousX = null;
+                isMoving = false;
             }
         });
     }
-
     moveCanon(distanceX) {
         this.canonContainer.x += distanceX;
         this.tireCanon.rotation += distanceX * 0.1;
@@ -326,6 +333,8 @@ export class GameScene extends Container {
                 let pos = this.meteorSpawner.spawns[i].position;
                 let globalPos = this.toGlobal(pos);
                 this.meteorSpawner.spawns.splice(i, 1);
+                this.effect2.emitter.updateSpawnPos(globalPos.x, globalPos.y)
+                this.effect2._breakEffect();
                 this.removeChild(meteor);
                 if (meteor.type == 'meteorMax') {
                     let localPos = this.toLocal(globalPos);
@@ -384,18 +393,11 @@ export class GameScene extends Container {
         // this.effect = new CanonEffect(this.canonContainer);
         this.effect = new CanonEffect(this._canonSprite);
     }
+    efftectMeteor() {
+        this.effect2 = new MeteorEffect(this)
+        console.log(this);
+    }
     resetText() { }
     resize() {
-        this.backgroundContainer.width = Manager.width;
-        this.backgroundContainer.height = Manager.height;
-
-        this._canonSprite.x = Manager.width / 2;
-        this._canonSprite.y = Manager.height - 100;
-
-        this.tireCanon.x = this._canonSprite.x + 35;
-        this.tireCanon.y = this._canonSprite.y + 40;
-
-        this.tireCanon2.x = this._canonSprite.x - 40;
-        this.tireCanon2.y = this._canonSprite.y + 40;
     }
 }

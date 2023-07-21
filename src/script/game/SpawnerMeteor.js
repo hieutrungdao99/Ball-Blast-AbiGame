@@ -1,5 +1,4 @@
 import { Container } from "pixi.js";
-import { Manager } from "../../system/Manager";
 import { Meteor } from "./MeteorObj";
 import { Meteor2 } from "./MeteorObj2";
 import { Meteor3 } from "./MeteorObj3";
