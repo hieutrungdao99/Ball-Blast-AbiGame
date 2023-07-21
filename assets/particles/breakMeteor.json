@@ -13,7 +13,7 @@
 		"end": "#ff0022"
 	},
 	"speed": {
-		"start": 1000,
+		"start": 600,
 		"end": 0,
 		"minimumSpeedMultiplier": 1
 	},
@@ -37,7 +37,7 @@
 	},
 	"blendMode": "normal",
 	"frequency": 0.001,
-	"emitterLifetime": 1,
+	"emitterLifetime": 0.5,
 	"maxParticles": 1000,
 	"pos": {
 		"x": 0,

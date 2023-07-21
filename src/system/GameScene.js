@@ -158,7 +158,7 @@ export class GameScene extends Container {
                 const texture = Texture.from('Bullet');
                 const bullet = new Bullet(
                     texture,
-                    this._canonSprite.x + this.canonContainer.x,
+                    this._canonSprite.x + this.canonContainer.x - 15,
                     this._canonSprite.y - 40,
                     10, //speed
                     0.7, //scale
@@ -167,24 +167,22 @@ export class GameScene extends Container {
                 this.lastShootTime = currentTime;
                 const bullet2 = new Bullet(
                     texture,
-                    this._canonSprite.x + this.canonContainer.x + 30,
+                    this._canonSprite.x + this.canonContainer.x + 10,
                     this._canonSprite.y - 40,
                     10, //speed
                     0.7, //scale
                 );
                 this.bulletsContainer.addChild(bullet2);
-                const bullet3 = new Bullet(
-                    texture,
-                    this._canonSprite.x + this.canonContainer.x - 30,
-                    this._canonSprite.y - 40,
-                    10, //speed
-                    0.7, //scale
-                );
-                this.bulletsContainer.addChild(bullet3);
+                // const bullet3 = new Bullet(
+                //     texture,
+                //     this._canonSprite.x + this.canonContainer.x - 30,
+                //     this._canonSprite.y - 40,
+                //     10, //speed
+                //     0.7, //scale
+                // );
+                // this.bulletsContainer.addChild(bullet3);
 
             }
-
-            // this.effect.onPointerDown();
         }
         //xóa đạn khi vượt khỏi khung hình
         for (let i = 0; i < this.bulletsContainer.children.length; i++) {
