@@ -383,6 +383,7 @@ export class GameScene extends Container {
         this.canonContainer.addChild(this.tireCanon);
         this.canonContainer.addChild(this.tireCanon2);
         this.started = true;
+        this.hasCollided = false;
         // Xóa màn kết quả
         if (this.resultScene) {
             this.removeChild(this.resultScene.container);
