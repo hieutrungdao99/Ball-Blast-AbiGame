@@ -35,6 +35,7 @@ export class GameScene extends Container {
         this.resultDisplayed = false;
         this.meteorSpawner = new Spawner();
         this.pointerIsDown = false;
+        this.hasCollided = false;
         // this.position.x = Manager.width / 2;
         // this.position.y = Manager.height / 2;
         document.addEventListener('pointerdown', () => {
@@ -82,7 +83,6 @@ export class GameScene extends Container {
         this.canonContainer = new Container();
         this._canonSprite = canon.canonSprite;
         this.canonContainer.addChild(this._canonSprite);
-
         this._canonSprite.zIndex = 10;
         //Create TireCanon
         this.tireCanon = canon.tireCanonSprite;
@@ -142,8 +142,11 @@ export class GameScene extends Container {
             }
         });
     }
+
     moveCanon(distanceX) {
-        this.canonContainer.x += distanceX;
+        if (!this.hasCollided) {
+            this.canonContainer.x += distanceX;
+        }
         this.tireCanon.rotation += distanceX * 0.1;
         this.tireCanon2.rotation += distanceX * 0.1;
     }
@@ -305,6 +308,7 @@ export class GameScene extends Container {
                                 this.meteorSpawner.spawns = [];
                                 this.started = false;
                             }
+                            this.hasCollided = true;
                             this.resultDisplayed = true;
                             this.resultScene = new ResultScene(
                                 result,
@@ -374,10 +378,11 @@ export class GameScene extends Container {
         this.bitmapText.collisionCount = 0;
         this.bitmapText.text = 'Score: 0';
         this.resultDisplayed = false;
+        this.canonContainer.x = 0;
+        this.canonContainer.addChild(this._canonSprite);
         this.canonContainer.addChild(this.tireCanon);
         this.canonContainer.addChild(this.tireCanon2);
         this.started = true;
-
         // Xóa màn kết quả
         if (this.resultScene) {
             this.removeChild(this.resultScene.container);
