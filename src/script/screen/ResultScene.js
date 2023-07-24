@@ -38,8 +38,9 @@ export class ResultScene extends EventEmitter {
             fontName: 'Desyrel',
             align: 'right',
         });
-        bitmap.x = Manager.width / 2 - 80;
-        bitmap.y = Manager.height / 2 - 50;
+        bitmap.anchor.set(0.5, 0.5);
+        bitmap.x = Manager.width / 2;
+        bitmap.y = Manager.height / 2 - 30;
         this.container.addChild(bitmap);
         gsap.to(bitmap, {
             alpha: 0,
