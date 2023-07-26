@@ -44,7 +44,7 @@ export class ResultScene extends EventEmitter {
         this.container.addChild(bitmap);
         gsap.to(bitmap, {
             alpha: 0,
-            duration: 0.5,
+            duration: 1,
             repeat: -1,
             yoyo: true,
         });
@@ -68,6 +68,22 @@ export class ResultScene extends EventEmitter {
             fontSize: 34,
             fill: '#ffffff',
         });
+        let bestScore = localStorage.getItem('bestScore');
+        if (score > bestScore)
+            localStorage.setItem('bestScore', score.toString());
+
+        const bestCore = new Text(`BestCore: ${localStorage.getItem('bestScore')}`, textStyle);
+        bestCore.anchor.set(0.5);
+        bestCore.x = Manager.width / 2;
+        bestCore.y = Manager.height / 2 - 170;
+        this.container.addChild(bestCore);
+        gsap.to(bestCore, {
+            alpha: 0,
+            duration: 1,
+            repeat: -1,
+            yoyo: true,
+        });
+
 
         const resultText = new Text(win ? 'You Win!' : 'You lose!', textStyle);
         resultText.anchor.set(0.5);
