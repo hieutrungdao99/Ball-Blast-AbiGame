@@ -34,20 +34,17 @@ export class ResultScene extends EventEmitter {
             fill: 'red',
         });
 
-        const bitmap = new BitmapText(`Score: ${score}`, {
-            fontName: 'Desyrel',
-            align: 'right',
+        const textStyle = new TextStyle({
+            fontFamily: 'Arial',
+            fontSize: 34,
+            fill: '#ffffff',
         });
+        const bitmap = new Text(`Score: ${score}`, textStyle);
+
         bitmap.anchor.set(0.5, 0.5);
         bitmap.x = Manager.width / 2;
         bitmap.y = Manager.height / 2 - 30;
         this.container.addChild(bitmap);
-        gsap.to(bitmap, {
-            alpha: 0,
-            duration: 1,
-            repeat: -1,
-            yoyo: true,
-        });
 
         const replayTexture = Texture.from(win ? 'Play' : 'Replay');
         const replayButton = new Sprite(replayTexture);
@@ -62,12 +59,6 @@ export class ResultScene extends EventEmitter {
             this.emit('replay');
         });
         this.container.addChild(replayButton);
-
-        const textStyle = new TextStyle({
-            fontFamily: 'Arial',
-            fontSize: 34,
-            fill: '#ffffff',
-        });
         let bestScore = localStorage.getItem('bestScore');
         if (score > bestScore)
             localStorage.setItem('bestScore', score.toString());
