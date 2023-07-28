@@ -72,7 +72,7 @@ export class ResultScene extends EventEmitter {
         if (score > bestScore)
             localStorage.setItem('bestScore', score.toString());
 
-        const bestCore = new Text(`BestCore: ${localStorage.getItem('bestScore')}`, textStyle);
+        const bestCore = new Text(`Best Core: ${localStorage.getItem('bestScore')}`, textStyle);
         bestCore.anchor.set(0.5);
         bestCore.x = Manager.width / 2;
         bestCore.y = Manager.height / 2 - 170;
