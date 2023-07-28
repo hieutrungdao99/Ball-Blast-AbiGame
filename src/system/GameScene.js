@@ -118,14 +118,13 @@ export class GameScene extends Container {
         this.coinContainer2.addChild(this._coin2Sprite)
         this.coinContainer2.x = Manager.width - this.coinContainer2.width * 2
         this.coinContainer2.y = 10 + this.coinContainer2.height / 2
-        this.coinText = new Text("x0", { fontFamily: "Arial", fontSize: 32, fill: "fcad03" });
+        this.coinText = new Text("x 0", { fontFamily: "Arial", fontSize: 32, fill: "fcad03" });
         this.coinText.position.set(20, -20);
         this.coinContainer2.addChild(this.coinText)
         this.addChild(this.coinContainer2)
     }
     update(framesPassed) {
         //xử lý khung hình
-
         this.handleFrame(framesPassed);
         if (this.started) {
             //xử lý bắn
@@ -163,7 +162,6 @@ export class GameScene extends Container {
             }
         });
     }
-
     moveCanon(distanceX) {
         if (!this.hasCollided) {
             this.canonContainer.x += distanceX;
@@ -197,7 +195,6 @@ export class GameScene extends Container {
                     0.7, //scale
                 );
                 this.bulletsContainer.addChild(bullet2);
-
             }
         }
         //xóa đạn khi vượt khỏi khung hình
@@ -247,7 +244,6 @@ export class GameScene extends Container {
                                 this.collisionCount += 1;
                                 this.bitmapText.collisionCount = this.collisionCount;
                                 this.bitmapText.text = `Score: + (${this.collisionCount})`;
-
                                 // điều kiện thắng
                                 if (
                                     this.collisionCount >= 200 &&
@@ -296,12 +292,10 @@ export class GameScene extends Container {
                         x: _canon.x + _canon.width / 2,
                         y: _canon.y + _canon.height / 2
                     };
-
                     const meteorCenter = {
                         x: _meteor.x + _meteor.width / 2,
                         y: _meteor.y + _meteor.height / 2
                     };
-
                     const canonRadius = Math.max(_canon.width, _canon.height) / 2;
                     const meteorRadius = Math.max(_meteor.width, _meteor.height) / 2;
                     if (meteor) {
@@ -363,7 +357,6 @@ export class GameScene extends Container {
                     this.meteorNor1.speedMeteorMinX = 1;
                     this.meteorNor2.speedMeteorMinX = -1;
                     this.meteorSpawner.spawns.push(this.meteorNor1, this.meteorNor2);
-
                 }
                 if (meteor.type == 'meteorNor') {
                     let localPos = this.toLocal(globalPos);
@@ -373,12 +366,15 @@ export class GameScene extends Container {
                     this.meteorMin1.speedMeteorMinX = 2;
                     this.meteorMin2.speedMeteorMinX = -2;
                     this.meteorSpawner.spawns.push(this.meteorMin1, this.meteorMin2);
-
                 }
             }
         }
     }
+    getCoinCount() {
+        return this.coinCount;
+    }
     handleCoinCollide() {
+        const coinCount = this.getCoinCount();
         for (let i = 0; i < this.canonContainer.children.length; i++) {
             let canon = this.canonContainer.children[i];
             for (let j = 0; j < this.coinContainer.children.length; j++) {
@@ -388,14 +384,15 @@ export class GameScene extends Container {
                 if (AABBCollision(_canon, _coin)) {
                     this.coinContainer.removeChild(coin);
                     this.coinCount++;
-                    this.coinText.text = `x${this.coinCount}`;
-                    sfx.play('PickGold', { volume: 0.1 })
-
+                    this.coinText.text = `x ${this.coinCount}`;
+                    sfx.play('PickGold', { volume: 0.1 });
+                    localStorage.setItem('coin', coinCount);
                 }
+
             }
         }
-    }
 
+    }
     startNewGame() {
         // Xóa thiên thạch cũ
         for (let i = 0; i < this.meteorSpawner.spawns.length; i++) {
@@ -403,14 +400,17 @@ export class GameScene extends Container {
             this.removeChild(meteor);
         }
         this.meteorSpawner.spawns = [];
-
-
         // Xóa đạn
         for (let i = 0; i < this.bulletsContainer.children.length; i++) {
             const bullet = this.bulletsContainer.children[i];
             this.bulletsContainer.removeChild(bullet);
         }
-
+        for (let i = 0; i < this.coinContainer.children.length; i++) {
+            const coin = this.coinContainer.children[i];
+            this.coinContainer.removeChild(coin);
+        }
+        // this.coinCount = 0;
+        // this.coinText.text = `x${this.coinCount}`;
         this.collisionCount = 0;
         this.bitmapText.collisionCount = 0;
         this.bitmapText.text = 'Score: 0';
@@ -423,12 +423,10 @@ export class GameScene extends Container {
 
         this.hasCollided = false;
         // Xóa màn kết quả
-
         if (this.resultScene) {
             this.removeChild(this.resultScene.container);
             this.resultScene = null;
         }
-
         Ticker.shared.start();
     }
     effectCanon() {
@@ -437,7 +435,6 @@ export class GameScene extends Container {
     efftectMeteor() {
         this.effect2 = new MeteorEffect(this)
     }
-
     resetText() { }
     resize() {
     }
