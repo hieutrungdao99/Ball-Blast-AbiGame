@@ -1,4 +1,4 @@
-import { Container, Ticker, Texture } from 'pixi.js';
+import { Container, Ticker, Texture, Text } from 'pixi.js';
 import { GameScreen } from '../script/screen/Background';
 import { Canon } from '../script/game/Canon';
 import { Bullet } from '../script/game/Bullet';
@@ -13,6 +13,8 @@ import { CanonEffect } from '../script/game/CanonEffect';
 import { Meteor2 } from '../script/game/MeteorObj2';
 import { Meteor } from '../script/game/MeteorObj';
 import { MeteorEffect } from '../script/game/MeteorEffect';
+import { Coin } from '../script/game/Coin';
+import { Coin2 } from '../script/game/Coin2';
 
 export class GameScene extends Container {
     keys = {};
@@ -28,14 +30,16 @@ export class GameScene extends Container {
         this.efftectMeteor();
         this.sortChildren();
         this.createPoint();
+        this.createCoin();
+        this.createCoin2();
+        this.coinCount = 0;
         this.collisionCount = 0;
         this.space = 5;
         this.lastShootTime = 0;
-        this.shootInterval = 150; //khoang cach dan
+        this.shootInterval = 150;
         this.resultDisplayed = false;
         this.meteorSpawner = new Spawner();
         this.pointerIsDown = false;
-        this.hasCollided = false;
         // this.position.x = Manager.width / 2;
         // this.position.y = Manager.height / 2;
         document.addEventListener('pointerdown', () => {
@@ -104,8 +108,25 @@ export class GameScene extends Container {
         this.bitmapTextContainer.addChild(this.bitmapText);
         this.addChild(this.bitmapTextContainer);
     }
+    createCoin() {
+        this.coinContainer = new Container()
+        this.addChild(this.coinContainer)
+    }
+    createCoin2() {
+        this.coin2 = new Coin2()
+        this.coinContainer2 = new Container()
+        this._coin2Sprite = this.coin2.sprite
+        this.coinContainer2.addChild(this._coin2Sprite)
+        this.coinContainer2.x = Manager.width - this.coinContainer2.width * 2
+        this.coinContainer2.y = 10 + this.coinContainer2.height / 2
+        this.coinText = new Text("x0", { fontFamily: "Arial", fontSize: 32, fill: "fcad03" });
+        this.coinText.position.set(20, -20);
+        this.coinContainer2.addChild(this.coinText)
+        this.addChild(this.coinContainer2)
+    }
     update(framesPassed) {
         //xử lý khung hình
+
         this.handleFrame(framesPassed);
         if (this.started) {
             //xử lý bắn
@@ -116,6 +137,7 @@ export class GameScene extends Container {
                 this.addChild(meteor);
                 meteor.update();
             });
+            this.handleCoinCollide()
         }
         // this.effect.update()
         this.effect.update();
@@ -176,14 +198,6 @@ export class GameScene extends Container {
                     0.7, //scale
                 );
                 this.bulletsContainer.addChild(bullet2);
-                // const bullet3 = new Bullet(
-                //     texture,
-                //     this._canonSprite.x + this.canonContainer.x - 30,
-                //     this._canonSprite.y - 40,
-                //     10, //speed
-                //     0.7, //scale
-                // );
-                // this.bulletsContainer.addChild(bullet3);
 
             }
         }
@@ -209,7 +223,7 @@ export class GameScene extends Container {
         } else if (this.canonContainer.x > this.maxX) {
             this.canonContainer.x = this.maxX;
         }
-        this.bg.tilePosition.x -= 2 * framesPassed;
+        this.bg.tilePosition.x -= 0.5 * framesPassed;
         this.minX = -Manager.width / 2 + this.tireCanon.width;
         this.maxX = Manager.width / 2 - this.tireCanon.width;
     }
@@ -300,7 +314,7 @@ export class GameScene extends Container {
                                     i < this.meteorSpawner.spawns.length;
                                     i++
                                 ) {
-                                    sfx.play('Dead');
+                                    sfx.play('Dead', { volume: 0.3 });
                                     this.effect._deadEffect();
                                     const meteor = this.meteorSpawner.spawns[i];
                                     this.removeChild(meteor);
@@ -338,14 +352,18 @@ export class GameScene extends Container {
                 this.effect2.emitter.updateSpawnPos(globalPos.x, globalPos.y)
                 this.effect2._breakEffect();
                 this.removeChild(meteor);
+                this.coin = new Coin()
+                this.coin.x = globalPos.x,
+                    this.coin.y = globalPos.y,
+                    this.coinContainer.addChild(this.coin)
                 if (meteor.type == 'meteorMax') {
                     let localPos = this.toLocal(globalPos);
                     this.meteorNor1 = new Meteor2(10, localPos.x + 30, localPos.y);
                     this.meteorNor2 = new Meteor2(10, localPos.x - 30, localPos.y);
-
                     this.meteorNor1.speedMeteorMinX = 1;
                     this.meteorNor2.speedMeteorMinX = -1;
                     this.meteorSpawner.spawns.push(this.meteorNor1, this.meteorNor2);
+
                 }
                 if (meteor.type == 'meteorNor') {
                     let localPos = this.toLocal(globalPos);
@@ -355,10 +373,29 @@ export class GameScene extends Container {
                     this.meteorMin1.speedMeteorMinX = 2;
                     this.meteorMin2.speedMeteorMinX = -2;
                     this.meteorSpawner.spawns.push(this.meteorMin1, this.meteorMin2);
+
                 }
             }
         }
     }
+    handleCoinCollide() {
+        for (let i = 0; i < this.canonContainer.children.length; i++) {
+            let canon = this.canonContainer.children[i];
+            for (let j = 0; j < this.coinContainer.children.length; j++) {
+                let coin = this.coinContainer.children[j];
+                let _canon = canon.getBounds();
+                let _coin = coin.getBounds();
+                if (AABBCollision(_canon, _coin)) {
+                    this.coinContainer.removeChild(coin);
+                    this.coinCount++;
+                    this.coinText.text = `x${this.coinCount}`;
+                    sfx.play('PickGold', { volume: 0.3 })
+
+                }
+            }
+        }
+    }
+
     startNewGame() {
         // Xóa thiên thạch cũ
         for (let i = 0; i < this.meteorSpawner.spawns.length; i++) {
@@ -367,13 +404,16 @@ export class GameScene extends Container {
         }
         this.meteorSpawner.spawns = [];
 
+        for (let i = 0; i < this.coinContainer.length; i++) {
+            const coin = this.coinContainer[i];
+            this.coinContainer.removeChild(coin)
+        }
         // Xóa đạn
         for (let i = 0; i < this.bulletsContainer.children.length; i++) {
             const bullet = this.bulletsContainer.children[i];
             this.bulletsContainer.removeChild(bullet);
         }
 
-        // Reset các giá trị về mặc định
         this.collisionCount = 0;
         this.bitmapText.collisionCount = 0;
         this.bitmapText.text = 'Score: 0';
@@ -383,24 +423,22 @@ export class GameScene extends Container {
         this.canonContainer.addChild(this.tireCanon);
         this.canonContainer.addChild(this.tireCanon2);
         this.started = true;
-        this.hasCollided = false;
+
         // Xóa màn kết quả
         if (this.resultScene) {
             this.removeChild(this.resultScene.container);
             this.resultScene = null;
         }
 
-        // Khởi động lại trò chơi
         Ticker.shared.start();
     }
     effectCanon() {
-        // this.effect = new CanonEffect(this.canonContainer);
         this.effect = new CanonEffect(this._canonSprite);
     }
     efftectMeteor() {
         this.effect2 = new MeteorEffect(this)
-        console.log(this);
     }
+
     resetText() { }
     resize() {
     }
