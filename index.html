@@ -5083,20 +5083,16 @@ class ResultScene extends events__WEBPACK_IMPORTED_MODULE_2__.EventEmitter {
       fontSize: 50,
       fill: "red"
     });
-    const bitmap = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.BitmapText(`Score: ${score}`, {
-      fontName: "Desyrel",
-      align: "right"
+    const textStyle = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.TextStyle({
+      fontFamily: "Arial",
+      fontSize: 34,
+      fill: "#ffffff"
     });
+    const bitmap = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Text(`Score: ${score}`, textStyle);
     bitmap.anchor.set(0.5, 0.5);
     bitmap.x = _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.width / 2;
     bitmap.y = _system_Manager__WEBPACK_IMPORTED_MODULE_1__.Manager.height / 2 - 30;
     this.container.addChild(bitmap);
-    gsap__WEBPACK_IMPORTED_MODULE_3__.gsap.to(bitmap, {
-      alpha: 0,
-      duration: 1,
-      repeat: -1,
-      yoyo: true
-    });
     const replayTexture = pixi_js__WEBPACK_IMPORTED_MODULE_0__.Texture.from(win ? "Play" : "Replay");
     const replayButton = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Sprite(replayTexture);
     replayButton.anchor.set(0.5);
@@ -5110,11 +5106,6 @@ class ResultScene extends events__WEBPACK_IMPORTED_MODULE_2__.EventEmitter {
       this.emit("replay");
     });
     this.container.addChild(replayButton);
-    const textStyle = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.TextStyle({
-      fontFamily: "Arial",
-      fontSize: 34,
-      fill: "#ffffff"
-    });
     let bestScore = localStorage.getItem("bestScore");
     if (score > bestScore)
       localStorage.setItem("bestScore", score.toString());
@@ -5370,7 +5361,7 @@ class GameScene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     this.coinContainer2.addChild(this._coin2Sprite);
     this.coinContainer2.x = _Manager__WEBPACK_IMPORTED_MODULE_4__.Manager.width - this.coinContainer2.width * 2;
     this.coinContainer2.y = 10 + this.coinContainer2.height / 2;
-    this.coinText = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Text("x0", { fontFamily: "Arial", fontSize: 32, fill: "fcad03" });
+    this.coinText = new pixi_js__WEBPACK_IMPORTED_MODULE_0__.Text("x 0", { fontFamily: "Arial", fontSize: 32, fill: "fcad03" });
     this.coinText.position.set(20, -20);
     this.coinContainer2.addChild(this.coinText);
     this.addChild(this.coinContainer2);
@@ -5605,7 +5596,11 @@ class GameScene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
       }
     }
   }
+  getCoinCount() {
+    return this.coinCount;
+  }
   handleCoinCollide() {
+    const coinCount = this.getCoinCount();
     for (let i = 0; i < this.canonContainer.children.length; i++) {
       let canon = this.canonContainer.children[i];
       for (let j = 0; j < this.coinContainer.children.length; j++) {
@@ -5615,8 +5610,9 @@ class GameScene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
         if ((0,_utils_collision__WEBPACK_IMPORTED_MODULE_10__.AABBCollision)(_canon, _coin)) {
           this.coinContainer.removeChild(coin);
           this.coinCount++;
-          this.coinText.text = `x${this.coinCount}`;
+          this.coinText.text = `x ${this.coinCount}`;
           _utils_Sound__WEBPACK_IMPORTED_MODULE_9__.sfx.play("PickGold", { volume: 0.1 });
+          localStorage.setItem("coin", coinCount);
         }
       }
     }
@@ -5630,6 +5626,10 @@ class GameScene extends pixi_js__WEBPACK_IMPORTED_MODULE_0__.Container {
     for (let i = 0; i < this.bulletsContainer.children.length; i++) {
       const bullet = this.bulletsContainer.children[i];
       this.bulletsContainer.removeChild(bullet);
+    }
+    for (let i = 0; i < this.coinContainer.children.length; i++) {
+      const coin = this.coinContainer.children[i];
+      this.coinContainer.removeChild(coin);
     }
     this.collisionCount = 0;
     this.bitmapText.collisionCount = 0;
