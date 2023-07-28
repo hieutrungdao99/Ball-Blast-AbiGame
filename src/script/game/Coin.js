@@ -4,7 +4,7 @@ import { Manager } from "../../system/Manager";
 export class Coin extends Container {
 
     sprite;
-    speedCoin = 3;
+    speedCoin = 10;
     spinSpeed = 0.25;
 
     constructor(x, y) {
@@ -22,13 +22,13 @@ export class Coin extends Container {
         this.sprite.play();
         this.sprite.animationSpeed = this.spinSpeed;
         Ticker.shared.add(this.update, this)
-        this.addChild(this.sprite)
     }
     update(deltaTime) {
         this.sprite.y += this.speedCoin * deltaTime;
-        if (this.sprite.y + this.sprite.height >= Manager.height) {
-            Ticker.shared.remove(this.update, this)
-            this.removeChild(this.sprite)
+        if (this.sprite.y + this.sprite.height * 2 >= Manager.height) {
+            this.speedCoin = 0
+            setTimeout(() => {
+            }, 1000)
         }
     }
 

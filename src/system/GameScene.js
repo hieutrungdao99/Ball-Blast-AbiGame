@@ -40,8 +40,7 @@ export class GameScene extends Container {
         this.resultDisplayed = false;
         this.meteorSpawner = new Spawner();
         this.pointerIsDown = false;
-        // this.position.x = Manager.width / 2;
-        // this.position.y = Manager.height / 2;
+        this.hasCollided = false;
         document.addEventListener('pointerdown', () => {
             this.pointerIsDown = true;
         });
@@ -353,9 +352,10 @@ export class GameScene extends Container {
                 this.effect2._breakEffect();
                 this.removeChild(meteor);
                 this.coin = new Coin()
-                this.coin.x = globalPos.x,
-                    this.coin.y = globalPos.y,
-                    this.coinContainer.addChild(this.coin)
+                this._coin = this.coin.sprite
+                this._coin.x = globalPos.x,
+                    this._coin.y = globalPos.y,
+                    this.coinContainer.addChild(this._coin)
                 if (meteor.type == 'meteorMax') {
                     let localPos = this.toLocal(globalPos);
                     this.meteorNor1 = new Meteor2(10, localPos.x + 30, localPos.y);
@@ -389,7 +389,7 @@ export class GameScene extends Container {
                     this.coinContainer.removeChild(coin);
                     this.coinCount++;
                     this.coinText.text = `x${this.coinCount}`;
-                    sfx.play('PickGold', { volume: 0.3 })
+                    sfx.play('PickGold', { volume: 0.1 })
 
                 }
             }
@@ -404,10 +404,7 @@ export class GameScene extends Container {
         }
         this.meteorSpawner.spawns = [];
 
-        for (let i = 0; i < this.coinContainer.length; i++) {
-            const coin = this.coinContainer[i];
-            this.coinContainer.removeChild(coin)
-        }
+
         // Xóa đạn
         for (let i = 0; i < this.bulletsContainer.children.length; i++) {
             const bullet = this.bulletsContainer.children[i];
@@ -424,7 +421,9 @@ export class GameScene extends Container {
         this.canonContainer.addChild(this.tireCanon2);
         this.started = true;
 
+        this.hasCollided = false;
         // Xóa màn kết quả
+
         if (this.resultScene) {
             this.removeChild(this.resultScene.container);
             this.resultScene = null;
